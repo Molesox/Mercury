@@ -1,0 +1,17 @@
+﻿<AuthorizeView>
+    <Authorized>
+        <NavLink href="LogOut">
+            <RadzenButton Text="Log out" ButtonStyle="ButtonStyle.Secondary" />
+        </NavLink>
+    </Authorized>
+    <NotAuthorized>
+        <div>
+            <NavLink href="Register">
+                <RadzenButton Text="Register" ButtonStyle="ButtonStyle.Primary" />
+            </NavLink>
+            <NavLink href="Login">
+                <RadzenButton Text="Log in" ButtonStyle="ButtonStyle.Primary" />
+            </NavLink>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
