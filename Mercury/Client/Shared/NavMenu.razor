@@ -1,9 +1,14 @@
-﻿
+﻿@inject IConfiguration Configuration
+
+
 <RadzenPanelMenu>
     <RadzenPanelMenuItem Text="Home" Path="/" Icon="home" />
     <AuthorizeView>
-        <RadzenPanelMenuItem Text="Counter" Path="counter" Icon="account_box" />
-        <RadzenPanelMenuItem Text="fetchdata" Path="fetchdata" Icon="account_box" />
+        <RadzenPanelMenuItem Text="Counter" Path="counter"   />
+        <RadzenPanelMenuItem Text="AspNetUsers" Path="fetchdata" Icon="account_box" />
+        <RadzenPanelMenuItem Text="AppUsers" Path="AppUser" Icon="group_work" />
     </AuthorizeView>
 </RadzenPanelMenu>
 
+
+ 

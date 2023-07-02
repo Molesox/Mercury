@@ -1,13 +1,19 @@
 using Mercury.Server.Data;
+using Mercury.Server.Data.Context;
+using Mercury.Shared.Models;
+using Mercury.Shared.Models.AspNetUser;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 
-using Microsoft.Extensions.Configuration; 
+using Microsoft.Extensions.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddTransient<MercuryDevContext, MercuryDevContext>();
+builder.Services.AddTransient<RepositoryEF<UserSearch, MercuryDevContext>>();
+builder.Services.AddTransient<RepositoryEF<AspNetUser, MercuryDevContext>>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 var configuration = builder.Configuration;
@@ -19,8 +25,10 @@ builder.Services.AddDefaultIdentity<IdentityUser>()
 
 var app = builder.Build();
 
+var isDev = app.Environment.IsDevelopment();
+
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (isDev)
 {
     app.UseWebAssemblyDebugging();
 }

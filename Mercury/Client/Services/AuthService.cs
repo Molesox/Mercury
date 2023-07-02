@@ -73,7 +73,7 @@ namespace Mercury.Client.Services
                 .MarkUserAsAuthenticated(loginModel.Email);
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("bearer", loginResult.Token);
-
+            
             return loginResult;
         }
 

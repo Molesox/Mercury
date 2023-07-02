@@ -32,10 +32,6 @@ builder.Services.AddBlazoredLocalStorage();
 /// Adds AuthorizationCore services to the DI container.
 /// </summary>
 builder.Services.AddAuthorizationCore();
-
-/// <summary>
-/// Adds the custom AuthenticationStateProvider to the DI container.
-/// </summary>
 builder.Services.AddScoped<AuthenticationStateProvider,
     ApiAuthenticationStateProvider>();
 
@@ -43,8 +39,4 @@ builder.Services.AddScoped<AuthenticationStateProvider,
 /// Adds the AuthService to the DI container.
 /// </summary>
 builder.Services.AddScoped<IAuthService, AuthService>();
-
-/// <summary>
-/// Builds the configured WebAssemblyHost and runs the application.
-/// </summary>
 await builder.Build().RunAsync();

@@ -1,12 +1,13 @@
-﻿@page "/fetchdata"
+﻿@page "/AppUser"
 @using Mercury.Shared
 @using Mercury.Shared.Models;
+@using Mercury.Shared.Models.AspNetUser;
 @inject UserSearchManager UserSearchManager
 @attribute [Authorize]
 
-<PageTitle>Application Users</PageTitle>
+<PageTitle>Asp Net Users</PageTitle>
 
-<RadzenText Text="Application Users" TextStyle="TextStyle.DisplayH3" />
+<RadzenText Text="Asp Net Users" TextStyle="TextStyle.DisplayH3" />
 
 <RadzenText Text="Main information list" TextStyle="TextStyle.Subtitle1" />
 
@@ -16,18 +17,18 @@
 }
 else
 {
-    <RadzenDataGrid @ref="grid" Data="@userSearch" TItem="UserSearch" ColumnWidth="200px">
+    <RadzenDataGrid @ref="grid" Data="@userSearch" TItem="AspNetUser" ColumnWidth="200px">
         <Columns>
-            <RadzenDataGridColumn TItem="UserSearch" Property="AspNetUserID" Title="User ID" Width="160px" />
-            <RadzenDataGridColumn TItem="UserSearch" Property="UserName" Title="Username" Width="160px" />
-            <RadzenDataGridColumn TItem="UserSearch" Property="Email" Title="Email" Width="200px" />
-            <RadzenDataGridColumn TItem="UserSearch" Property="PhoneNumber" Title="Phone Number" Width="160px" />
-            <RadzenDataGridColumn TItem="UserSearch" Property="LockoutEnabled" Title="Lockout Enabled" Width="160px">
+            <RadzenDataGridColumn TItem="AspNetUser" Property="AspNetUserID" Title="User ID" Width="160px" />
+            <RadzenDataGridColumn TItem="AspNetUser" Property="UserName" Title="Username" Width="160px" />
+            <RadzenDataGridColumn TItem="AspNetUser" Property="Email" Title="Email" Width="200px" />
+            <RadzenDataGridColumn TItem="AspNetUser" Property="PhoneNumber" Title="Phone Number" Width="160px" />
+            <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnabled" Title="Lockout Enabled" Width="160px">
                 <Template Context="user">
                     @(user.LockoutEnabled ? "Yes" : "No")
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="UserSearch" Property="LockoutEnd" Title="Lockout End" Width="160px">
+            <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnd" Title="Lockout End" Width="160px">
                 <Template Context="user">
                     @user.LockoutEnd?.ToString("d")
                 </Template>
@@ -40,9 +41,9 @@ else
 
 @code {
 
-    RadzenDataGrid<UserSearch> grid;
-    IEnumerable<UserSearch> userSearch;
-    UserSearch User;
+    RadzenDataGrid<AspNetUser> grid;
+    IEnumerable<AspNetUser> userSearch;
+    AspNetUser User;
     string SearchName = "";
     string ErrorMessage = "";
 
@@ -51,10 +52,10 @@ else
         ErrorMessage = "";
         try
         {
-            var result = await UserSearchManager.GetAll();
+            var result = await UserSearchManager.GetAspNetUsers();
             if (result != null)
             {
-                userSearch = result.ToList<UserSearch>();
+                userSearch = result.ToList<AspNetUser>();
                 User = null;
             }
             else
