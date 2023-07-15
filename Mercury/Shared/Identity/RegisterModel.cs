@@ -20,6 +20,7 @@ namespace Mercury.Shared.Identity
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
         public required string Email { get; set; }
 
         /// <summary>

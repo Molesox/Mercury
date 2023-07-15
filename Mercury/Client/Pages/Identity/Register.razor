@@ -3,66 +3,100 @@
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
 
-<h1>Register</h1>
+<RadzenText Text="Register" TextStyle="TextStyle.DisplayH4" />
 
-@if (ShowErrors)
-{
-    <div class="alert alert-danger" role="alert">
-        @foreach (var error in Errors)
-        {
-            <p>@error</p>
-        }
-    </div>
-}
+<RadzenCard>
+    <ChildContent>
+        <RadzenContent>
+            <RadzenText TextStyle="TextStyle.DisplayH5">Please enter your details</RadzenText>
+            <RadzenTemplateForm TItem="RegisterModel" data=@RegisterModel @onsubmit="HandleRegistration">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <RadzenStack>
+                    <RadzenFieldset>
+                        <RadzenStack>
 
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Please enter your details</h5>
-        <EditForm Model="RegisterModel" OnValidSubmit="HandleRegistration">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+                            <RadzenFormField Text="Email" Variant="Variant.Filled">
+                                <RadzenTextBox @bind-Value="RegisterModel.Email" Name="email" />
+                            </RadzenFormField>
 
-            <div class="form-group">
-                <label for="email">Email address</label>
-                <InputText Id="email" class="form-control" @bind-Value="RegisterModel.Email" />
-                <ValidationMessage For="@(() => RegisterModel.Email)" />
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <InputText Id="password" type="password" class="form-control" @bind-Value="RegisterModel.Password" />
-                <ValidationMessage For="@(() => RegisterModel.Password)" />
-            </div>
-            <div class="form-group">
-                <label for="password">Confirm Password</label>
-                <InputText Id="password" type="password" class="form-control" @bind-Value="RegisterModel.ConfirmPassword" />
-                <ValidationMessage For="@(() => RegisterModel.ConfirmPassword)" />
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </EditForm>
-    </div>
-</div>
+
+
+                            <RadzenFormField Text="Password" Variant="Variant.Filled">
+                                <RadzenPassword @bind-Value="RegisterModel.Password" Name="password"
+                                                InputType="password" />
+                            </RadzenFormField>
+
+
+
+                            <RadzenFormField Text="Confirm password" Variant="Variant.Filled">
+                                <RadzenPassword @bind-Value="RegisterModel.ConfirmPassword" Name="confirmPassword"
+                                                InputType="password" />
+                            </RadzenFormField>
+                        </RadzenStack>
+                    </RadzenFieldset>
+
+                    <RadzenButton ButtonType="ButtonType.Submit" Text="Submit" />
+                </RadzenStack>
+
+            </RadzenTemplateForm>
+            @if (ShowErrors)
+            {
+                @foreach (var error in Errors)
+                {
+                    <RadzenAlert AlertStyle="AlertStyle.Danger" ShowIcon="true" Variant="Variant.Flat" Shade="Shade.Lighter">
+                        @error
+                    </RadzenAlert>
+                }
+            }
+        </RadzenContent>
+    </ChildContent>
+</RadzenCard>
 
 @code {
-
-    private RegisterModel RegisterModel = new RegisterModel(){ConfirmPassword="", Email="", Password=""};
+    private RegisterModel RegisterModel = new RegisterModel() { ConfirmPassword = "", Email = "", Password = "" };
     private bool ShowErrors;
     private IEnumerable<string> Errors;
+
+   
 
     private async Task HandleRegistration()
     {
         ShowErrors = false;
 
-        var result = await AuthService.Register(RegisterModel);
+        var registrationResult = await AuthService.Register(RegisterModel);
 
-        if (result.Successful)
+
+        if (!registrationResult.IsSuccesful)
         {
-            NavigationManager.NavigateTo("/login");
+            SetErrors(registrationResult.Errors);
+            return;
         }
-        else
+
+        var loginModel = new LoginModel() { Email = RegisterModel.Email, Password = RegisterModel.Password, RememberMe=false };
+        var loginResult = await AuthService.Login(loginModel);
+
+        var status = (registrationResult.IsSuccesful, loginResult.IsSuccesful);
+
+        switch (status)
         {
-            Errors = result.Errors;
-            ShowErrors = true;
+            case (true, true):
+                NavigationManager.NavigateTo("/");
+                break;
+            case (false, _):
+                SetErrors(registrationResult.Errors);
+                break;
+            case (_, false):
+                SetErrors(new[] { loginResult.Errors.First()! });
+                break;
         }
     }
 
+    private void SetErrors(IEnumerable<string> errors)
+    {
+        Errors = errors;
+        ShowErrors = true;
+    }
+
 }
+

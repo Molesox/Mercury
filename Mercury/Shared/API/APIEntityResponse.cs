@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Mercury.Shared.API
 {
     #region APIEntityResponse class
+
     /// <summary>
     /// This class represents a standard response for an API call with an entity of type TEntity.
     /// </summary>
@@ -14,6 +15,7 @@ namespace Mercury.Shared.API
     public class APIEntityResponse<TEntity> where TEntity : class
     {
         #region Properties
+
         /// <summary>
         /// Gets or sets a value indicating whether the API call was successful.
         /// </summary>
@@ -27,9 +29,11 @@ namespace Mercury.Shared.API
         /// <summary>
         /// Gets or sets the data resulting from a successful API call.
         /// </summary>
-        public TEntity Data { get; set; }
+        public TEntity? Data { get; set; }
+
         #endregion
     }
+
     #endregion
 
 }

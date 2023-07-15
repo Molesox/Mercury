@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Mercury.Shared.API
 {
     #region APIListOfEntityResponse class
+
     /// <summary>
     /// This class represents a standard response for an API call with a list of entities of type TEntity.
     /// </summary>
@@ -14,6 +15,7 @@ namespace Mercury.Shared.API
     public class APIListOfEntityResponse<TEntity> where TEntity : class
     {
         #region Properties
+
         /// <summary>
         /// Gets or sets a value indicating whether the API call was successful.
         /// </summary>
@@ -28,9 +30,11 @@ namespace Mercury.Shared.API
         /// Gets or sets the data resulting from a successful API call.
         /// This will be a list of TEntity type objects.
         /// </summary>
-        public IEnumerable<TEntity> Data { get; set; }
+        public IEnumerable<TEntity> Data { get; set; } = new List<TEntity>();
+
         #endregion
     }
+
     #endregion
 
 }

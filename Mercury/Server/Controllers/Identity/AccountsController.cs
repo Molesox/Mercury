@@ -36,13 +36,18 @@ namespace Mercury.Server.Controllers.Identity
 
             if (!result.Succeeded)
             {
-                var errors = result.Errors.Select(x => x.Description);
+                var errors = result.Errors.Select(x => x.Description) ?? new []{"No description available"};
 
-                return Ok(new RegisterResult { Successful = false, Errors = errors });
+                return Ok(new RegisterResult
+                {
+                    IsSuccesful = false,
+                    Errors = errors,
+                    
+                });
 
             }
 
-            return Ok(new RegisterResult { Successful = true });
+            return Ok(new RegisterResult { IsSuccesful = true });
         }
     }
 }

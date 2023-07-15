@@ -11,7 +11,7 @@ namespace Mercury.Server.Controllers.Identity
 {
     /// <summary>
     /// API controller for handling user logins.
-    /// </summary
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
@@ -41,7 +41,7 @@ namespace Mercury.Server.Controllers.Identity
         {
             var result = await _signInManager.PasswordSignInAsync(login.Email, login.Password, false, false);
 
-            if (!result.Succeeded) return BadRequest(new LoginResult { Successful = false, Error = "Username and password are invalid." });
+            if (!result.Succeeded) return BadRequest(new LoginResult("Username and password are invalid.") { IsSuccesful = false });
 
             var claims = new[]
             {
@@ -60,7 +60,7 @@ namespace Mercury.Server.Controllers.Identity
                 signingCredentials: creds
             );
 
-            return Ok(new LoginResult { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
+            return Ok(new LoginResult { IsSuccesful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
         }
     }
 }

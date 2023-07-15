@@ -1,44 +1,74 @@
 ﻿@page "/login"
 @using Mercury.Shared.Identity;
+
+
+@inject IJSRuntime JSRuntime
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
 
-<h1>Login</h1>
 
-@if (ShowErrors)
-{
-    <div class="alert alert-danger" role="alert">
-        <p>@Error</p>
-    </div>
-}
 
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Please enter your details</h5>
-        <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+<RadzenText Text="Login" TextStyle="TextStyle.DisplayH4" />
 
-            <div class="form-group">
-                <label for="email">Email address</label>
-                <InputText Id="email" Class="form-control" @bind-Value="loginModel.Email" />
-                <ValidationMessage For="@(() => loginModel.Email)" />
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <InputText Id="password" type="password" Class="form-control" @bind-Value="loginModel.Password" />
-                <ValidationMessage For="@(() => loginModel.Password)" />
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </EditForm>
-    </div>
-</div>
+<RadzenCard>
+    <ChildContent>
+        <RadzenContent>
+            <RadzenText TextStyle="TextStyle.DisplayH5">Please enter your details</RadzenText>
+
+            <RadzenTemplateForm TItem="LoginModel" Data=loginModel OnValidSubmit="HandleLogin">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <RadzenStack>
+                    <RadzenFieldset>
+                        <RadzenFormField Text="Email" >
+                            <RadzenTextBox @bind-Value="loginModel.Email" Name="email" />
+                        </RadzenFormField>
+                        <RadzenFormField Text="Password" >
+                            <RadzenPassword @bind-Value="loginModel.Password" Name="password" InputType="password" />
+                        </RadzenFormField>
+                    </RadzenFieldset>
+
+                        <RadzenStack  Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0.5rem">
+                            <RadzenLabel   Text="Remember me"/>
+                            <RadzenSwitch  @bind-bind-Value="loginModel.RememberMe" Name="rememberMe" Value="true"
+                                Disabled="false" />
+                        </RadzenStack>
+
+                    <RadzenButton ButtonType="ButtonType.Submit" Text="Submit" />
+                </RadzenStack>
+            </RadzenTemplateForm>
+
+            @if (ShowErrors)
+            {
+                <RadzenAlert AlertStyle="AlertStyle.Danger" ShowIcon="true" Variant="Variant.Flat" Shade="Shade.Lighter">
+                    @Error
+                </RadzenAlert>
+
+            }
+        </RadzenContent>
+    </ChildContent>
+</RadzenCard>
 
 @code {
 
-    private LoginModel loginModel = new LoginModel(){Email="", Password=""};
+    public LoginModel loginModel { get; set; } = new LoginModel() { Email = "", Password = "" };
     private bool ShowErrors;
     private string Error = "";
+    protected override void OnInitialized()
+    {
+        if (true)
+        {
+            loginModel = new LoginModel() { Email = "mercury@galaxia.ia", Password = "Mgalaxia.ia420" };
+        }
+        else
+        {
+            loginModel = new LoginModel() { Email = "", Password = "" };
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("console.log", "Component initialized");
+    }
 
     private async Task HandleLogin()
     {
@@ -46,13 +76,13 @@
 
         var result = await AuthService.Login(loginModel);
 
-        if (result.Successful)
+        if (result.IsSuccesful)
         {
             NavigationManager.NavigateTo("/");
         }
         else
         {
-            Error = result.Error;
+            Error = result.Errors.FirstOrDefault() ?? "Something bad happened";
             ShowErrors = true;
         }
     }

@@ -45,8 +45,17 @@ namespace Mercury.Client.Services
         /// <returns>A task result that represents the asynchronous operation, containing the registration result.</returns>
         public async Task<RegisterResult> Register(RegisterModel registerModel)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/accounts", registerModel);
-            return await response.Content.ReadFromJsonAsync<RegisterResult>();
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("api/accounts", registerModel);
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadFromJsonAsync<RegisterResult>();
+                return result;
+            }
+            catch(Exception e) {
+                Console.WriteLine(e.Message);
+                return new RegisterResult("Something bad happened, try again later") { IsSuccesful = false , };
+            }
         }
 
         /// <summary>
@@ -56,25 +65,34 @@ namespace Mercury.Client.Services
         /// <returns>A task result that represents the asynchronous operation, containing the login result. A successful login stores the JWT token in local storage and sets the user as authenticated.</returns>
         public async Task<LoginResult> Login(LoginModel loginModel)
         {
-            var loginAsJson = JsonSerializer.Serialize(loginModel);
-            var response = await _httpClient.PostAsync("api/Login",
-                new StringContent(loginAsJson, Encoding.UTF8, "application/json"));
-            var loginResult = JsonSerializer.Deserialize<LoginResult>(
-                await response.Content.ReadAsStringAsync(),
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-            if (!response.IsSuccessStatusCode)
+            try
             {
+                var loginAsJson = JsonSerializer.Serialize(loginModel);
+                var response = await _httpClient.PostAsync("api/Login",
+                    new StringContent(loginAsJson, Encoding.UTF8, "application/json"));
+                var loginResult = JsonSerializer.Deserialize<LoginResult>(
+                    await response.Content.ReadAsStringAsync(),
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                if (!response.IsSuccessStatusCode || loginResult is null)
+                {
+                    return loginResult ?? new LoginResult("Something bad happended, try again later...") { IsSuccesful = false };
+                }
+
+                await _localStorage.SetItemAsync("authToken", loginResult.Token);
+                ((ApiAuthenticationStateProvider)_authenticationStateProvider)
+                    .MarkUserAsAuthenticated(loginModel.Email);
+                _httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("bearer", loginResult.Token);
+
                 return loginResult;
             }
-
-            await _localStorage.SetItemAsync("authToken", loginResult.Token);
-            ((ApiAuthenticationStateProvider)_authenticationStateProvider)
-                .MarkUserAsAuthenticated(loginModel.Email);
-            _httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("bearer", loginResult.Token);
+            catch (Exception ex)
+            {
+                return new LoginResult("Something bad happended, try again later...") { IsSuccesful = false };
+            }
             
-            return loginResult;
+
         }
 
         /// <summary>
