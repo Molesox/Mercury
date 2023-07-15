@@ -2,7 +2,8 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Blazored.LocalStorage;
-using System.Text.Json;
+using Newtonsoft.Json;
+
 using System.Text;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -47,14 +48,21 @@ namespace Mercury.Client.Services
         {
             try
             {
-                var response = await _httpClient.PostAsJsonAsync("api/accounts", registerModel);
+                var registerAsJson = JsonConvert.SerializeObject(registerModel); ;
+
+                var response = await _httpClient.PostAsync("api/Accounts", new StringContent(registerAsJson, Encoding.UTF8, "application/json"));
                 response.EnsureSuccessStatusCode();
-                var result = await response.Content.ReadFromJsonAsync<RegisterResult>();
+                var content = await response.Content.ReadAsStringAsync();
+
+                var result = JsonConvert.DeserializeObject<RegisterResult>(content);
+
                 return result;
             }
-            catch(Exception e) {
+            catch (Exception e)
+            {
+
                 Console.WriteLine(e.Message);
-                return new RegisterResult("Something bad happened, try again later") { IsSuccesful = false , };
+                return new RegisterResult("Something bad happened, try again later") { IsSuccesful = false, };
             }
         }
 
@@ -67,12 +75,11 @@ namespace Mercury.Client.Services
         {
             try
             {
-                var loginAsJson = JsonSerializer.Serialize(loginModel);
+                var loginAsJson = JsonConvert.SerializeObject(loginModel);
                 var response = await _httpClient.PostAsync("api/Login",
                     new StringContent(loginAsJson, Encoding.UTF8, "application/json"));
-                var loginResult = JsonSerializer.Deserialize<LoginResult>(
-                    await response.Content.ReadAsStringAsync(),
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                var content = await response.Content.ReadAsStringAsync();
+                var loginResult = JsonConvert.DeserializeObject<LoginResult>(content);
 
                 if (!response.IsSuccessStatusCode || loginResult is null)
                 {
@@ -87,11 +94,11 @@ namespace Mercury.Client.Services
 
                 return loginResult;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new LoginResult("Something bad happended, try again later...") { IsSuccesful = false };
             }
-            
+
 
         }
 

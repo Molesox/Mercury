@@ -14,6 +14,7 @@ namespace Mercury.Shared.Identity
     {
         public RegisterResult(string errorMessage=""):base(errorMessage)
         {
+            
         }
     }
 }

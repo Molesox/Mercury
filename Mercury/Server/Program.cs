@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,7 +16,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddTransient<MercuryDevContext, MercuryDevContext>();
 builder.Services.AddTransient<RepositoryEF<UserSearch, MercuryDevContext>>();
 builder.Services.AddTransient<RepositoryEF<AspNetUser, MercuryDevContext>>();
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().ConfigureApiBehaviorOptions((opts) =>
+{
+    opts.SuppressModelStateInvalidFilter = true;
+});
 builder.Services.AddRazorPages();
 var configuration = builder.Configuration;
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

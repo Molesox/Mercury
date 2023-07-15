@@ -147,6 +147,7 @@ namespace Mercury.Server.Controllers
             }
             catch (Exception ex)
             {
+
                 // log exception here
                 return StatusCode(500);
             }

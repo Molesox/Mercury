@@ -28,7 +28,7 @@ namespace Mercury.Server.Controllers.Identity
         /// <param name="model">The registration model containing user data.</param>
         /// <returns>A task result that represents the asynchronous operation, containing the ActionResult of the registration attempt.</returns>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] RegisterModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             var newUser = new IdentityUser { UserName = model.Email, Email = model.Email };
 
