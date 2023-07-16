@@ -7,7 +7,9 @@
                 <RadzenSidebarToggle Click="@(() => sidebar1Expanded = !sidebar1Expanded)" />
                 <RadzenLabel Text="Mercury" />
             </RadzenStack>
-            <LoginDisplay />
+            <RadzenRow Class="rz-px-3">
+                <LoginDisplay />
+            </RadzenRow>
         </RadzenStack>
 
     </RadzenHeader>
@@ -20,7 +22,7 @@
         </div>
     </RadzenBody>
     <RadzenFooter>
-       <RadzenImage Path="GalaxIA.png" Style="width: 7rem;"></RadzenImage>
+        <RadzenImage Path="GalaxIA.png" Style="width: 7rem;"></RadzenImage>
     </RadzenFooter>
 </RadzenLayout>
 

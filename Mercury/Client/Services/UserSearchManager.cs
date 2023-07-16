@@ -16,7 +16,7 @@ namespace Mercury.Client.Services
             http = _http;
         }
 
-        public async Task<IEnumerable<AspNetUser>> GetAspNetUsers( )
+        public async Task<IEnumerable<AspNetUser>> GetAspNetUsers()
         {
             try
             {

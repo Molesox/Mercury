@@ -9,6 +9,9 @@ namespace Mercury.Server.Data.Context;
 
 public partial class MercuryDevContext : DbContext
 {
+
+    #region Ctors
+
     public MercuryDevContext()
     {
     }
@@ -18,22 +21,18 @@ public partial class MercuryDevContext : DbContext
     {
     }
 
+    #endregion
+
     public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
-
     public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
-
     public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
-
     public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-
     public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-
     public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
     public virtual DbSet<UserSearch> UserSearches { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=MercuryDev;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+    public IQueryable<UserSearch> UserSearch(string UserName, string Email) =>
+        FromExpression(() => UserSearch(UserName, Email));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -115,8 +114,6 @@ public partial class MercuryDevContext : DbContext
         modelBuilder.HasDbFunction(typeof(MercuryDevContext).GetMethod(nameof(UserSearch), new[] { typeof(string), typeof(string) }));
         OnModelCreatingPartial(modelBuilder);
     }
-    public IQueryable<UserSearch> UserSearch(string UserName, string Email) => FromExpression(() => UserSearch(UserName, Email));
-
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 

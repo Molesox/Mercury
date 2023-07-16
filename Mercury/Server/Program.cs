@@ -10,23 +10,23 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
+var connectionString = configuration.GetConnectionString("DefaultConnection");
 
 // Add services to the container.
 
-builder.Services.AddTransient<MercuryDevContext, MercuryDevContext>();
-builder.Services.AddTransient<RepositoryEF<UserSearch, MercuryDevContext>>();
-builder.Services.AddTransient<RepositoryEF<AspNetUser, MercuryDevContext>>();
 builder.Services.AddControllersWithViews().ConfigureApiBehaviorOptions((opts) =>
 {
     opts.SuppressModelStateInvalidFilter = true;
 });
 builder.Services.AddRazorPages();
-var configuration = builder.Configuration;
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-               options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<MercuryDevContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddTransient<RepositoryEF<UserSearch, MercuryDevContext>>();
+builder.Services.AddTransient<RepositoryEF<AspNetUser, MercuryDevContext>>();
+
+builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 var app = builder.Build();
 
