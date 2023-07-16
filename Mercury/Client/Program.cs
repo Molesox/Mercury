@@ -39,4 +39,8 @@ builder.Services.AddScoped<AuthenticationStateProvider,
 /// Adds the AuthService to the DI container.
 /// </summary>
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddScoped<UserSearchManager>();
+
 await builder.Build().RunAsync();
+

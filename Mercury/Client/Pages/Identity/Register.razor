@@ -33,7 +33,7 @@
                         <RadzenTemplateForm TItem="RegisterModel" Data=@registerModel Submit="@HandleRegistration">
                             <RadzenStack>
 
-                                <RadzenFormField Text="Email">
+                                <RadzenFormField Variant="@Variant.Filled" Text="Email">
                                     <ChildContent>
                                         <RadzenTextBox Name="Email" @bind-Value=@registerModel.Email />
                                     </ChildContent>
@@ -42,7 +42,7 @@
                                         <RadzenEmailValidator Component="Email" Text="Provide a valid email address" />
                                     </Helper>
                                 </RadzenFormField>
-                                <RadzenFormField Text="Password">
+                                <RadzenFormField Variant="@Variant.Filled" Text="Password">
                                     <ChildContent>
                                         <RadzenPassword Name="Password" @bind-Value=@registerModel.Password />
                                     </ChildContent>
@@ -50,7 +50,7 @@
                                         <RadzenRequiredValidator Component="Password" Text="Password required" />
                                     </Helper>
                                 </RadzenFormField>
-                                <RadzenFormField Text="Confirm password">
+                                <RadzenFormField Variant="@Variant.Filled" Text="Confirm password">
                                     <ChildContent>
                                         <RadzenPassword Name="ConfirmPassword" @bind-Value=@registerModel.ConfirmPassword />
                                     </ChildContent>
