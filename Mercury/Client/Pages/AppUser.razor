@@ -17,25 +17,34 @@
 }
 else
 {
-    <RadzenDataGrid @ref="grid" Data="@userSearch" TItem="AspNetUser" ColumnWidth="200px">
-        <Columns>
-            <RadzenDataGridColumn TItem="AspNetUser" Property="Id" Title="User ID" Width="160px" />
-            <RadzenDataGridColumn TItem="AspNetUser" Property="UserName" Title="Username" Width="160px" />
-            <RadzenDataGridColumn TItem="AspNetUser" Property="Email" Title="Email" Width="200px" />
-            <RadzenDataGridColumn TItem="AspNetUser" Property="PhoneNumber" Title="Phone Number" Width="160px" />
-            <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnabled" Title="Lockout Enabled" Width="160px">
-                <Template Context="user">
-                    @(user.LockoutEnabled ? "Yes" : "No")
-                </Template>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnd" Title="Lockout End" Width="160px">
-                <Template Context="user">
-                    @user.LockoutEnd?.ToString("d")
-                </Template>
-            </RadzenDataGridColumn>
-        </Columns>
-    </RadzenDataGrid>
+<RadzenRow>
+    <RadzenColumn>
+        <RadzenDataGrid @ref="grid" Data="@userSearch" TItem="AspNetUser" ColumnWidth="200px">
+            <Columns>
+                <RadzenDataGridColumn TItem="AspNetUser" Property="Id" Title="User ID" Width="160px" />
+                <RadzenDataGridColumn TItem="AspNetUser" Property="UserName" Title="Username" Width="160px" />
+                <RadzenDataGridColumn TItem="AspNetUser" Property="Email" Title="Email" Width="200px" />
+                <RadzenDataGridColumn TItem="AspNetUser" Property="PhoneNumber" Title="Phone Number" Width="160px" />
+                <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnabled" Title="Lockout Enabled" Width="160px">
+                    <Template Context="user">
+                        @(user.LockoutEnabled ? "Yes" : "No")
+                    </Template>
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnd" Title="Lockout End" Width="160px">
+                    <Template Context="user">
+                        @user.LockoutEnd?.ToString("d")
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    </RadzenColumn>
+    <RadzenColumn>
 
+        <RadzenCard>
+            <RadzenText Text="Hello world"/>
+        </RadzenCard>
+    </RadzenColumn>
+</RadzenRow>
 
 }
 
