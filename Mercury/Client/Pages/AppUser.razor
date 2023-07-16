@@ -17,42 +17,73 @@
 }
 else
 {
-<RadzenRow>
-    <RadzenColumn>
+    <RadzenRow>
+    <RadzenColumn Size="9">
         <RadzenDataGrid @ref="grid" Data="@userSearch" TItem="AspNetUser" ColumnWidth="200px">
             <Columns>
                 <RadzenDataGridColumn TItem="AspNetUser" Property="Id" Title="User ID" Width="160px" />
                 <RadzenDataGridColumn TItem="AspNetUser" Property="UserName" Title="Username" Width="160px" />
                 <RadzenDataGridColumn TItem="AspNetUser" Property="Email" Title="Email" Width="200px" />
                 <RadzenDataGridColumn TItem="AspNetUser" Property="PhoneNumber" Title="Phone Number" Width="160px" />
-                <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnabled" Title="Lockout Enabled" Width="160px">
+                <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnabled" Title="Lockout Enabled"
+                    Width="160px">
                     <Template Context="user">
                         @(user.LockoutEnabled ? "Yes" : "No")
-                    </Template>
-                </RadzenDataGridColumn>
-                <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnd" Title="Lockout End" Width="160px">
-                    <Template Context="user">
-                        @user.LockoutEnd?.ToString("d")
-                    </Template>
-                </RadzenDataGridColumn>
-            </Columns>
-        </RadzenDataGrid>
-    </RadzenColumn>
-    <RadzenColumn>
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnd" Title="Lockout End" Width="160px">
+                        <Template Context="user">
+                            @user.LockoutEnd?.ToString("d")
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        </RadzenColumn>
+        <RadzenColumn Size="3">
+            <RadzenStack>
+            <RadzenCard>
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center"
+                    JustifyContent="JustifyContent.Start">
 
-        <RadzenCard>
-            <RadzenText Text="Hello world"/>
-        </RadzenCard>
-    </RadzenColumn>
-</RadzenRow>
+                        <RadzenButton Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Success" Icon="add" />
+                        <RadzenButton Variant="Variant.Outlined" Icon="edit" />
+                        <RadzenButton Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" Icon="delete" />
+                    <RadzenText  TextStyle="TextStyle.Caption" Text="Basic operations" />
+                </RadzenStack>
+            </RadzenCard>
+             <RadzenCard>
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center"
+                    JustifyContent="JustifyContent.Start">
+                        <RadzenButton Size="ButtonSize.Small" Variant="Variant.Outlined" Text="xlsx"/>
+                        <RadzenButton Size="ButtonSize.Small" Variant="Variant.Outlined" Text="csv"/>
+                        <RadzenButton Size="ButtonSize.Small" Variant="Variant.Outlined" Text="txt"/>
+                    <RadzenText  TextStyle="TextStyle.Caption" Text="Exports" />
+                </RadzenStack>
+            </RadzenCard>
+
+             <RadzenCard>
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center"
+                    JustifyContent="JustifyContent.Start">
+                        <RadzenButton Size="ButtonSize.Small" Variant="Variant.Filled" ButtonStyle="ButtonStyle.Success" Text="Unlock"/>
+                        <RadzenButton Size="ButtonSize.Small" Variant="Variant.Filled" ButtonStyle="ButtonStyle.Danger" Text="Lock"/>
+                    
+                    <RadzenText  TextStyle="TextStyle.Caption" Text="The user access to application" />
+                </RadzenStack>
+            </RadzenCard>
+
+            </RadzenStack>
+
+
+        </RadzenColumn>
+    </RadzenRow>
 
 }
 
 @code {
 
-    RadzenDataGrid<AspNetUser> grid;
-    IEnumerable<AspNetUser> userSearch;
-    AspNetUser User;
+    RadzenDataGrid<AspNetUser>? grid;
+    IEnumerable<AspNetUser>? userSearch;
+    AspNetUser? User;
     string SearchName = "";
     string ErrorMessage = "";
 
