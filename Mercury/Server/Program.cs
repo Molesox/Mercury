@@ -17,7 +17,7 @@ var connectionString = configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddControllersWithViews().ConfigureApiBehaviorOptions((opts) =>
 {
-    opts.SuppressModelStateInvalidFilter = true;
+    //opts.SuppressModelStateInvalidFilter = true;
 });
 builder.Services.AddRazorPages();
 

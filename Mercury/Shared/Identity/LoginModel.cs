@@ -18,8 +18,7 @@ namespace Mercury.Shared.Identity
         /// <value>The Email address of the user.</value>
         [Required]
         [EmailAddress]
-        [DataType(DataType.EmailAddress)]
-        public required string Email { get; set; }
+        public string Email { get; set; }
 
         /// <summary>
         /// Gets or sets a required Password.
@@ -27,8 +26,7 @@ namespace Mercury.Shared.Identity
         /// <value>The password of the user.</value>
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        public required string Password { get; set; }
+        public string Password { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the user should be remembered.

@@ -19,7 +19,10 @@ else
 {
     <RadzenRow>
     <RadzenColumn Size="9">
-        <RadzenDataGrid @ref="grid" Data="@userSearch" TItem="AspNetUser" ColumnWidth="200px">
+            <RadzenDataGrid AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Simple"
+             AllowVirtualization="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+            AllowFiltering="true" SelectionMode="DataGridSelectionMode.Multiple"
+            @ref="grid" Data="@userSearch" TItem="AspNetUser" ColumnWidth="200px">
             <Columns>
                 <RadzenDataGridColumn TItem="AspNetUser" Property="Id" Title="User ID" Width="160px" />
                 <RadzenDataGridColumn TItem="AspNetUser" Property="UserName" Title="Username" Width="160px" />
@@ -95,7 +98,7 @@ else
             var result = await UserSearchManager.GetAspNetUsers();
             if (result != null)
             {
-                userSearch = result.ToList<AspNetUser>();
+                userSearch = result ;
                 User = null;
             }
             else

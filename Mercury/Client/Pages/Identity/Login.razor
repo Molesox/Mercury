@@ -19,25 +19,29 @@
                         <RadzenText TextStyle="TextStyle.H5" TagName="TagName.H2" Class="rz-mb-6">
                             Login
                         </RadzenText>
-                        <RadzenTemplateForm Data=@("LoginModel")>
+           
+                        <RadzenTemplateForm EditContext="@editContext" InvalidSubmit="@(args => OnInvalidSubmit(args))" Data=@loginModel TItem="LoginModel">
+                            <DataAnnotationsValidator />
+                           
                             <RadzenLogin AllowRememberMe="true"
                                          Password="@loginModel.Password"
                                          Username="@loginModel.Email"
                                          RememberMe="@loginModel.RememberMe"
                                          FormFieldVariant="Variant.Filled"
-                                         Login="@HandleLogin"
+                                         Login="@(async args =>  await HandleLogin(args))"
                                          RegisterText="Register"
                                          AllowResetPassword="false"
+                                         
                                          Register="@(()=>NavigationManager.NavigateTo("/Register"))" />
                         </RadzenTemplateForm>
                     </RadzenCard>
                 </RadzenColumn>
             </RadzenRow>
 
-            @if (ShowErrors)
+            @if (ShowServerError)
             {
                 <RadzenAlert AlertStyle="AlertStyle.Danger" ShowIcon="true" Variant="Variant.Flat" Shade="Shade.Lighter">
-                    @Error
+                    @ServerError
                 </RadzenAlert>
             }
         </RadzenContent>
@@ -45,22 +49,52 @@
 </RadzenCard>
 
 @code {
+    public LoginModel loginModel= new LoginModel() { Email = "mercury@galaxia.ia", Password = "Mgalaxia.ia420" };
+    [CascadingParameter]
+    EditContext editContext { get; set; }
 
-    public LoginModel loginModel { get; set; }
-    private bool ShowErrors;
-    private string Error = "";
-
-    protected override void OnInitialized()
+    public Login()
     {
-        loginModel = new LoginModel() { Email = "mercury@galaxia.ia", Password = "Mgalaxia.ia420" };
-        base.OnInitialized();
+        editContext = new(loginModel);
     }
 
-    private async Task HandleLogin()
+
+    private bool ShowServerError;
+    private bool ShowValidationError;
+
+    private string ServerError = "";
+    private IEnumerable<string> ValidationErrors = new List<string>();
+
+    private void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
     {
-        ShowErrors = false;
+        ShowValidationError = true;
+        ValidationErrors = args.Errors;
+
+    }
+
+    private async Task HandleLogin(LoginArgs args)
+    {
+        ShowServerError = false;
+
+        if (args is null)
+            return;
+
+        var loginModel = new LoginModel()
+            {
+                Email = args.Username,
+                Password = args.Password,
+                RememberMe = args.RememberMe
+            };
+
+ 
+        if (!editContext.Validate())
+          {
+            ShowValidationError = true;
+            ValidationErrors = editContext.GetValidationMessages();
+          }
 
         var result = await AuthService.Login(loginModel);
+
 
         if (result.IsSuccesful)
         {
@@ -68,8 +102,8 @@
         }
         else
         {
-            Error = result.Errors.FirstOrDefault() ?? "Something bad happened";
-            ShowErrors = true;
+            ServerError = result.Errors.FirstOrDefault() ?? "Something bad happened";
+            ShowServerError = true;
         }
     }
 
