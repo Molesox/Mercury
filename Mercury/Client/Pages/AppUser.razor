@@ -1,4 +1,5 @@
 ﻿@page "/AppUser"
+@using Mercury.Client.Components
 @using Mercury.Shared
 @using Mercury.Shared.Models;
 @using Mercury.Shared.Models.AspNetUser;
@@ -18,20 +19,20 @@
 else
 {
     <RadzenRow>
-    <RadzenColumn Size="9">
-            <RadzenDataGrid AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.Simple"
-             AllowVirtualization="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-            AllowFiltering="true" SelectionMode="DataGridSelectionMode.Multiple"
+        <RadzenColumn Size="9">
+            <RadzenDataGrid AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.SimpleWithMenu"
+                            AllowVirtualization="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                            AllowFiltering="true" SelectionMode="DataGridSelectionMode.Multiple"
             @ref="grid" Data="@userSearch" TItem="AspNetUser" ColumnWidth="200px">
-            <Columns>
-                <RadzenDataGridColumn TItem="AspNetUser" Property="Id" Title="User ID" Width="160px" />
-                <RadzenDataGridColumn TItem="AspNetUser" Property="UserName" Title="Username" Width="160px" />
-                <RadzenDataGridColumn TItem="AspNetUser" Property="Email" Title="Email" Width="200px" />
-                <RadzenDataGridColumn TItem="AspNetUser" Property="PhoneNumber" Title="Phone Number" Width="160px" />
-                <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnabled" Title="Lockout Enabled"
-                    Width="160px">
-                    <Template Context="user">
-                        @(user.LockoutEnabled ? "Yes" : "No")
+                <Columns>
+                    <RadzenDataGridColumn TItem="AspNetUser" Property="Id" Title="User ID" Width="160px" />
+                    <RadzenDataGridColumn TItem="AspNetUser" Property="UserName" Title="Username" Width="160px" />
+                    <RadzenDataGridColumn TItem="AspNetUser" Property="Email" Title="Email" Width="200px" />
+                    <RadzenDataGridColumn TItem="AspNetUser" Property="PhoneNumber" Title="Phone Number" Width="160px" />
+                    <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnabled" Title="Lockout Enabled"
+                                          Width="160px">
+                        <Template Context="user">
+                            @(user.LockoutEnabled ? "Yes" : "No")
                         </Template>
                     </RadzenDataGridColumn>
                     <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnd" Title="Lockout End" Width="160px">
@@ -43,44 +44,20 @@ else
             </RadzenDataGrid>
         </RadzenColumn>
         <RadzenColumn Size="3">
-            <RadzenStack>
-            <RadzenCard>
-                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center"
-                    JustifyContent="JustifyContent.Start">
 
-                        <RadzenButton Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Success" Icon="add" />
-                        <RadzenButton Variant="Variant.Outlined" Icon="edit" />
-                        <RadzenButton Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Danger" Icon="delete" />
-                    <RadzenText  TextStyle="TextStyle.Caption" Text="Basic operations" />
-                </RadzenStack>
-            </RadzenCard>
-             <RadzenCard>
-                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center"
-                    JustifyContent="JustifyContent.Start">
-                        <RadzenButton Size="ButtonSize.Small" Variant="Variant.Outlined" Text="xlsx"/>
-                        <RadzenButton Size="ButtonSize.Small" Variant="Variant.Outlined" Text="csv"/>
-                        <RadzenButton Size="ButtonSize.Small" Variant="Variant.Outlined" Text="txt"/>
-                    <RadzenText  TextStyle="TextStyle.Caption" Text="Exports" />
-                </RadzenStack>
-            </RadzenCard>
-
-             <RadzenCard>
-                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center"
-                    JustifyContent="JustifyContent.Start">
-                        <RadzenButton Size="ButtonSize.Small" Variant="Variant.Filled" ButtonStyle="ButtonStyle.Success" Text="Unlock"/>
-                        <RadzenButton Size="ButtonSize.Small" Variant="Variant.Filled" ButtonStyle="ButtonStyle.Danger" Text="Lock"/>
-                    
-                    <RadzenText  TextStyle="TextStyle.Caption" Text="The user access to application" />
-                </RadzenStack>
-            </RadzenCard>
-
-            </RadzenStack>
+            <RadzenDataList AllowVirtualization="true" Style="height:400px;overflow:auto;"
+                            Data="@commandGroups" TItem="CommandGroupStr">
+                <Template Context="command">
+                    <CommandGroup GroupStr="command" />
+                </Template>
+            </RadzenDataList>
 
 
         </RadzenColumn>
     </RadzenRow>
 
 }
+
 
 @code {
 
@@ -89,6 +66,61 @@ else
     AspNetUser? User;
     string SearchName = "";
     string ErrorMessage = "";
+    List<CommandGroupStr>? commandGroups;
+
+    protected override void OnInitialized()
+    {
+        commandGroups = new List<CommandGroupStr>()
+        {
+            new CommandGroupStr
+            {
+                Title = "Basic operations",
+                Buttons = new List<CommandButtonStr>
+                {
+                    new CommandButtonStr{ Variant = "Outlined", ButtonStyle = "Success", Icon = "add" },
+                    new CommandButtonStr{ Variant = "Outlined", ButtonStyle = "Primary", Icon = "edit" },
+                    new CommandButtonStr{ Variant = "Outlined", ButtonStyle = "Danger", Icon = "delete" }
+                }
+            },
+            new CommandGroupStr
+            {
+                Title = "Exports",
+                Buttons = new List<CommandButtonStr>
+                {
+                    new CommandButtonStr{ Size = "Small", Variant = "Outlined", Text = "xlsx" },
+                    new CommandButtonStr{ Size = "Small", Variant = "Outlined", Text = "csv" },
+                    new CommandButtonStr{ Size = "Small", Variant = "Outlined", Text = "txt" }
+                }
+            },
+            new CommandGroupStr
+            {
+                Title = "The user access to application",
+                Buttons = new List<CommandButtonStr>
+                {
+                    new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Success", Text = "Unlock", Icon="lock_open" },
+                    new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Danger", Text = "Lock" , Icon="lock"}
+                }
+            },
+            new CommandGroupStr
+            {
+                Title = "Re-send 2 factor authentication code by",
+                Buttons = new List<CommandButtonStr>
+                {
+                    new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Light", Text = "Email", Icon="mail_outline"},
+                    new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Light", Text = "Phone", Icon="phone" }
+                }
+            },
+            new CommandGroupStr
+            {
+                Title = "Force user's next login password reset",
+                Buttons = new List<CommandButtonStr>
+                {
+                    new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Light", Text = "Start the password reset", Icon="lock_reset" },
+                }
+            }
+        };
+        base.OnInitialized();
+    }
 
     async Task GetAllUserSearch()
     {
@@ -98,7 +130,7 @@ else
             var result = await UserSearchManager.GetAspNetUsers();
             if (result != null)
             {
-                userSearch = result ;
+                userSearch = result;
                 User = null;
             }
             else

@@ -1,0 +1,21 @@
+﻿
+
+@using Mercury.Shared.Models;
+
+@code {
+    [Parameter] public CommandGroupStr GroupStr { get; set; }
+
+    public AlignItems AlignItems => Enum.TryParse(GroupStr.AlignItems, out AlignItems result) ? result : AlignItems.Center;
+    public JustifyContent JustifyContent => Enum.TryParse(GroupStr.JustifyContent, out JustifyContent result) ? result : JustifyContent.SpaceAround;
+}
+
+
+    <RadzenStack Gap="1">
+        <RadzenText TextStyle="TextStyle.Caption" Text="@GroupStr.Title" />
+        <RadzenRow AlignItems="@AlignItems" JustifyContent="@JustifyContent">
+            @foreach (var button in GroupStr.Buttons)
+            {
+                <CommandButton ButtonStr="button" />
+            }
+        </RadzenRow>
+    </RadzenStack>
