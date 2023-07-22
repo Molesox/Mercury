@@ -10,4 +10,11 @@ namespace Mercury.Client.Services
             : base(_http, "AppUsers", nameof(AspNetUser.Id))
         { }
     }
+
+    public class AspNetRoleManager : APIRepository<AspNetRole>
+    {
+        public AspNetRoleManager(HttpClient _http)
+            : base(_http, "Roles", nameof(AspNetRole.Id))
+        { }
+    }
 }

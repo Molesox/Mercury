@@ -31,6 +31,7 @@ builder.Services.AddScoped<AuthenticationStateProvider,
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<AspNetUserManager>();
+builder.Services.AddScoped<AspNetRoleManager>();
 
 await builder.Build().RunAsync();
 

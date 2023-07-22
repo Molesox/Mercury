@@ -4,6 +4,8 @@
 @using Mercury.Shared.Models;
 @using Mercury.Shared.Models.AspNetUser;
 @inject AspNetUserManager AspNetUserManager
+@inject AspNetRoleManager AspNetRoleManager
+
 @attribute [Authorize]
 
 <PageTitle>Asp Net Users</PageTitle>
@@ -18,117 +20,185 @@
 }
 else
 {
+
     <RadzenRow>
-        <RadzenColumn Size="9">
-            <RadzenDataGrid AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.SimpleWithMenu"
-                            AllowVirtualization="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                            AllowFiltering="true" SelectionMode="DataGridSelectionMode.Multiple" Style="min-width:600;"
-            @ref="grid" Data="@aspNetUsers" TItem="AspNetUser" ColumnWidth="200px">
-                <Columns>
-                    <RadzenDataGridColumn TItem="AspNetUser" Property="Id" Title="User ID" Width="160px" />
-                    <RadzenDataGridColumn TItem="AspNetUser" Property="UserName" Title="Username" Width="160px" />
-                    <RadzenDataGridColumn TItem="AspNetUser" Property="Email" Title="Email" Width="200px" />
-                    <RadzenDataGridColumn TItem="AspNetUser" Property="PhoneNumber" Title="Phone Number" Width="160px" />
-                    <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnabled" Title="Lockout Enabled"
-                                          Width="160px">
-                        <Template Context="user">
-                            @(user.LockoutEnabled ? "Yes" : "No")
+    <RadzenColumn>
+        <RadzenRow Style="height:50%">
+            <RadzenColumn Size="9">
+                <RadzenDataGrid AllowColumnResize="true" AllowAlternatingRows="false"
+                    FilterMode="FilterMode.SimpleWithMenu" AllowVirtualization="true" AllowSorting="true"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowFiltering="true"
+                    SelectionMode="DataGridSelectionMode.Single" Style="min-width:600; height:100%" @ref="usersgrid"
+                    Data="@aspNetUsers" TItem="AspNetUser" ColumnWidth="200px">
+                    <Columns>
+                        <RadzenDataGridColumn TItem="AspNetUser" Property="Id" Title="User ID" Width="160px" />
+                        <RadzenDataGridColumn TItem="AspNetUser" Property="UserName" Title="Username" Width="160px" />
+                        <RadzenDataGridColumn TItem="AspNetUser" Property="Email" Title="Email" Width="200px" />
+                        <RadzenDataGridColumn TItem="AspNetUser" Property="PhoneNumber" Title="Phone Number"
+                            Width="160px" />
+                        <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnabled" Title="Lockout Enabled"
+                            Width="160px">
+                            <Template Context="user">
+                                @(user.LockoutEnabled ? "Yes" : "No")
+                                </Template>
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnd" Title="Lockout End"
+                                Width="160px">
+                                <Template Context="user">
+                                    @user.LockoutEnd?.ToString("d")
+                                </Template>
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </RadzenDataGrid>
+                </RadzenColumn>
+                <RadzenColumn Size="3">
+
+                    <RadzenDataList AllowVirtualization="true" Style="height:400px;overflow:auto;"
+                        Data="@commandGroupsUsers" TItem="CommandGroupStr">
+                        <Template Context="command">
+                            <CommandGroup GroupStr="command" />
                         </Template>
-                    </RadzenDataGridColumn>
-                    <RadzenDataGridColumn TItem="AspNetUser" Property="LockoutEnd" Title="Lockout End" Width="160px">
-                        <Template Context="user">
-                            @user.LockoutEnd?.ToString("d")
+                    </RadzenDataList>
+
+
+                </RadzenColumn>
+            </RadzenRow>
+
+            <RadzenRow class="rz-mt-5" Style="heigh:50%">
+                <RadzenColumn Size="9">
+                    <RadzenDataGrid AllowColumnResize="true" AllowAlternatingRows="false"
+                        FilterMode="FilterMode.SimpleWithMenu" AllowVirtualization="true" AllowSorting="true"
+                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowFiltering="true"
+                        SelectionMode="DataGridSelectionMode.Multiple" Style="min-width:600; min-height:100%" @ref="rolesgrid"
+                        Data="@aspNetRoles" TItem="AspNetRole" ColumnWidth="200px">
+                        <Columns>
+                            <RadzenDataGridColumn TItem="AspNetRole" Property="Id" Title="Role ID" Width="160px" />
+                            <RadzenDataGridColumn TItem="AspNetRole" Property="Name" Title="Role Name" Width="160px" />
+                            <RadzenDataGridColumn TItem="AspNetRole" Property="NormalizedName" Title="Normalized Role Name"
+                                Width="200px" />
+                            <RadzenDataGridColumn TItem="AspNetRole" Property="ConcurrencyStamp" Title="Concurrency Stamp"
+                                Width="160px" />
+                        </Columns>
+
+                    </RadzenDataGrid>
+                </RadzenColumn>
+                <RadzenColumn Size="3">
+
+                    <RadzenDataList AllowVirtualization="true" Style="height:400px;overflow:auto;"
+                        Data="@commandGroupsRoles" TItem="CommandGroupStr">
+                        <Template Context="command">
+                            <CommandGroup GroupStr="command" />
                         </Template>
-                    </RadzenDataGridColumn>
-                </Columns>
-            </RadzenDataGrid>
-        </RadzenColumn>
-        <RadzenColumn Size="3">
+                    </RadzenDataList>
 
-            <RadzenDataList AllowVirtualization="true" Style="height:400px;overflow:auto;"
-                            Data="@commandGroups" TItem="CommandGroupStr">
-                <Template Context="command">
-                    <CommandGroup GroupStr="command" />
-                </Template>
-            </RadzenDataList>
-
-
+                </RadzenColumn>
+            </RadzenRow>
         </RadzenColumn>
     </RadzenRow>
-
 }
 
 
 @code {
 
-    RadzenDataGrid<AspNetUser>? grid;
+    RadzenDataGrid<AspNetUser>? usersgrid;
     IEnumerable<AspNetUser>? aspNetUsers;
     AspNetUser? user;
-    string SearchName = "";
     string ErrorMessage = "";
-    List<CommandGroupStr>? commandGroups;
+    List<CommandGroupStr>? commandGroupsUsers;
+
+    //same but for roles
+
+    RadzenDataGrid<AspNetRole>? rolesgrid;
+    IEnumerable<AspNetRole>? aspNetRoles;
+    AspNetRole? role;
+    List<CommandGroupStr>? commandGroupsRoles;
+
 
     protected override void OnInitialized()
     {
-        commandGroups = new List<CommandGroupStr>()
-        {
-            new CommandGroupStr
-            {
-                Title = "Basic operations",
-                Buttons = new List<CommandButtonStr>
-                {
-                    new CommandButtonStr{ Variant = "Outlined", ButtonStyle = "Success", Icon = "add" },
-                    new CommandButtonStr{ Variant = "Outlined", ButtonStyle = "Primary", Icon = "edit" },
-                    new CommandButtonStr{ Variant = "Outlined", ButtonStyle = "Danger", Icon = "delete" }
-                }
-            },
-            new CommandGroupStr
-            {
-                Title = "Exports",
-                Buttons = new List<CommandButtonStr>
-                {
-                    new CommandButtonStr{ Size = "Small", Variant = "Outlined", Text = "xlsx" },
-                    new CommandButtonStr{ Size = "Small", Variant = "Outlined", Text = "csv" },
-                    new CommandButtonStr{ Size = "Small", Variant = "Outlined", Text = "txt" }
-                }
-            },
-            new CommandGroupStr
-            {
-                Title = "The user access to application",
-                Buttons = new List<CommandButtonStr>
-                {
-                    new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Success", Text = "Unlock", Icon="lock_open" },
-                    new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Danger", Text = "Lock" , Icon="lock"}
-                }
-            },
-            new CommandGroupStr
-            {
-                Title = "Re-send 2 factor authentication code by",
-                Buttons = new List<CommandButtonStr>
-                {
-                    new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Light", Text = "Email", Icon="mail_outline"},
-                    new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Light", Text = "Phone", Icon="phone" }
-                }
-            },
-            new CommandGroupStr
-            {
-                Title = "Force user's next login password reset",
-                Buttons = new List<CommandButtonStr>
-                {
-                    new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Light", Text = "Start the password reset", Icon="lock_reset" },
-                }
-            }
-        };
+        var commands = new List<CommandGroupStr>()
+{
+new CommandGroupStr
+{
+Title = "Basic operations",
+Buttons = new List<CommandButtonStr>
+{
+new CommandButtonStr{ Variant = "Outlined", ButtonStyle = "Success", Icon = "add" },
+new CommandButtonStr{ Variant = "Outlined", ButtonStyle = "Primary", Icon = "edit" },
+new CommandButtonStr{ Variant = "Outlined", ButtonStyle = "Danger", Icon = "delete" }
+}
+},
+new CommandGroupStr
+{
+Title = "Exports",
+Buttons = new List<CommandButtonStr>
+{
+new CommandButtonStr{ Size = "Small", Variant = "Outlined", Text = "xlsx" },
+new CommandButtonStr{ Size = "Small", Variant = "Outlined", Text = "csv" },
+new CommandButtonStr{ Size = "Small", Variant = "Outlined", Text = "txt" }
+}
+},
+new CommandGroupStr
+{
+Title = "The user access to application",
+Buttons = new List<CommandButtonStr>
+{
+new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Success", Text = "Unlock", Icon="lock_open" },
+new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Danger", Text = "Lock" , Icon="lock"}
+}
+},
+new CommandGroupStr
+{
+Title = "Re-send 2 factor authentication code by",
+Buttons = new List<CommandButtonStr>
+{
+new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Light", Text = "Email", Icon="mail_outline"},
+new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Light", Text = "Phone", Icon="phone" }
+}
+},
+new CommandGroupStr
+{
+Title = "Force user's next login password reset",
+Buttons = new List<CommandButtonStr>
+{
+new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Light", Text = "Start the password reset",
+Icon="lock_reset" },
+}
+}
+};
+        commandGroupsUsers = commands;
+        commandGroupsRoles = commands;
         base.OnInitialized();
     }
 
+    async Task GetAllRoles()
+    {
+
+        try
+        {
+            var result = await AspNetRoleManager.GetAll();
+            if (result is not null)
+            {
+                aspNetRoles = result;
+                role = null;
+            }
+            else
+            {
+                ErrorMessage = "Could not fetch app roles";
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+    }
     async Task GetAllUsers()
     {
         ErrorMessage = "";
         try
         {
             var result = await AspNetUserManager.GetAll();
-            if (result != null)
+            if (result is not null)
             {
                 aspNetUsers = result;
                 user = null;
@@ -147,5 +217,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         await GetAllUsers();
+        await GetAllRoles();
     }
 }
