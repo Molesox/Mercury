@@ -16,6 +16,7 @@ namespace Mercury.Shared.Repository
     public interface IRepositoryGenericGet<TEntity> : IRepository<TEntity> where TEntity : class
     {
         #region Methods
+
         /// <summary>
         /// Generic Get method for retrieving entities.
         /// </summary>
@@ -27,6 +28,7 @@ namespace Mercury.Shared.Repository
             Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "");
+            
         #endregion
     }
     #endregion

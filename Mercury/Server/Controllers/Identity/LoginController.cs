@@ -41,14 +41,16 @@ namespace Mercury.Server.Controllers.Identity
         {
             var result = await _signInManager.PasswordSignInAsync(login.Email, login.Password, false, false);
 
-            if (!result.Succeeded) return BadRequest(new LoginResult("Username and password are invalid.") { IsSuccesful = false });
+            if (result.IsLockedOut) return CreateLoginFailureResponse("User is currently locked out.");
+            if (result.IsNotAllowed) return CreateLoginFailureResponse("User is not allowed to login.");
+            if (result.RequiresTwoFactor) return CreateLoginFailureResponse("This account requires two-factor authentication.");
 
-            var claims = new[]
-            {
-            new Claim(ClaimTypes.Name, login.Email)
-        };
+            var claims = new[] { new Claim(ClaimTypes.Name, login.Email) };
+            string? jwtSecurityKey = _configuration.GetValue<string>("JwtSecurityKey");
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSecurityKey"]));
+            if (jwtSecurityKey is null) return CreateLoginFailureResponse();
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecurityKey));
+
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expiry = DateTime.Now.AddDays(Convert.ToInt32(_configuration["JwtExpiryInDays"]));
 
@@ -61,6 +63,11 @@ namespace Mercury.Server.Controllers.Identity
             );
 
             return Ok(new LoginResult { IsSuccesful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
+        }
+        private BadRequestObjectResult CreateLoginFailureResponse(string? message= null)
+        {
+
+            return BadRequest(new LoginResult(message ?? "Something bad happend, please try again later.") { IsSuccesful = false });
         }
     }
 }

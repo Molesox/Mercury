@@ -22,7 +22,7 @@ else
         <RadzenColumn Size="9">
             <RadzenDataGrid AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.SimpleWithMenu"
                             AllowVirtualization="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                            AllowFiltering="true" SelectionMode="DataGridSelectionMode.Multiple"
+                            AllowFiltering="true" SelectionMode="DataGridSelectionMode.Multiple" Style="min-width:600;"
             @ref="grid" Data="@userSearch" TItem="AspNetUser" ColumnWidth="200px">
                 <Columns>
                     <RadzenDataGridColumn TItem="AspNetUser" Property="Id" Title="User ID" Width="160px" />

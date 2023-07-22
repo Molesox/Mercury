@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Mercury.Shared.Repository
 {
     #region IRepository interface
+
     /// <summary>
     /// The IRepository interface provides the standard operations to be performed on a data repository for a given type.
     /// </summary>
@@ -14,6 +15,7 @@ namespace Mercury.Shared.Repository
     public interface IRepository<TEntity> where TEntity : class
     {
         #region Methods
+        
         /// <summary>
         /// Deletes the specified entity from the repository.
         /// </summary>

@@ -42,7 +42,6 @@ namespace Mercury.Server.Controllers.Identity
                 {
                     IsSuccesful = false,
                     Errors = errors,
-                    
                 });
 
             }

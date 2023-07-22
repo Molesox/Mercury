@@ -58,7 +58,7 @@ namespace Mercury.Server.Data
         /// <param name="includeProperties">Properties to be included in the query result.</param>
         /// <returns>An IEnumerable of entities.</returns>
         public virtual async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
-        {
+        {//todo: handle nulls 
             try
             {
                 // Get the dbSet from the Entity passed in                
@@ -100,10 +100,8 @@ namespace Mercury.Server.Data
         /// <returns>An IEnumerable of entities.</returns>
         public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
-            // Assuming context is correctly initialized in your code
-
             if (typeof(TEntity).Name.Contains("Search"))
-            {
+            { //todo: add GetSearch in interface and implement  
                 // Use reflection to check if a corresponding EntitySearch function exists
                 var methodName = typeof(TEntity).Name;
                 var searchFunction = typeof(TDataContext).GetMethod(methodName);
@@ -121,15 +119,10 @@ namespace Mercury.Server.Data
             }
 
             // If TEntity name does not contain "Search" or no method found, use the DbSet
+            //todo: error handling
             return await context.Set<TEntity>().ToListAsync();
         }
-
-
-
-
-
-
-
+        
         /// <summary>
         /// Gets an entity using its ID.
         /// </summary>
