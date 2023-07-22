@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Mercury.Shared.Repository
+﻿namespace Mercury.Shared.Repository
 {
-    #region IRepository interface
-
     /// <summary>
     /// The IRepository interface provides the standard operations to be performed on a data repository for a given type.
     /// </summary>
@@ -41,23 +33,22 @@ namespace Mercury.Shared.Repository
         /// </summary>
         /// <param name="id">ID of the entity to retrieve.</param>
         /// <returns>The entity if found; otherwise, null.</returns>
-        Task<TEntity> GetByID(object id);
+        Task<TEntity?> GetByID(object id);
 
         /// <summary>
         /// Inserts a new entity into the repository.
         /// </summary>
         /// <param name="entity">Entity to insert.</param>
         /// <returns>The inserted entity.</returns>
-        Task<TEntity> Insert(TEntity entity);
+        Task<TEntity?> Insert(TEntity entity);
 
         /// <summary>
         /// Updates an existing entity in the repository.
         /// </summary>
         /// <param name="entityToUpdate">Entity to update.</param>
         /// <returns>The updated entity.</returns>
-        Task<TEntity> Update(TEntity entityToUpdate);
+        Task<TEntity?> Update(TEntity entityToUpdate);
+
         #endregion
     }
-    #endregion
-
 }

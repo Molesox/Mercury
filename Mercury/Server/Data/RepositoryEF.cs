@@ -46,7 +46,8 @@ namespace Mercury.Server.Data
         /// <returns>True if the operation was successful; otherwise, false.</returns>
         public virtual async Task<bool> Delete(object id)
         {
-            TEntity entityToDelete = await dbSet.FindAsync(id);
+            TEntity? entityToDelete = await dbSet.FindAsync(id);
+            if (entityToDelete is null) return false;
             return await Delete(entityToDelete);
         }
 
@@ -57,7 +58,7 @@ namespace Mercury.Server.Data
         /// <param name="orderBy">A function to order elements.</param>
         /// <param name="includeProperties">Properties to be included in the query result.</param>
         /// <returns>An IEnumerable of entities.</returns>
-        public virtual async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")
+        public virtual async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>>? filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, string includeProperties = "")
         {//todo: handle nulls 
             try
             {
@@ -65,10 +66,7 @@ namespace Mercury.Server.Data
                 IQueryable<TEntity> query = dbSet;
 
                 // Apply the filter
-                if (filter != null)
-                {
-                    query = query.Where(filter);
-                }
+                if (filter is not null) query = query.Where(filter);
 
                 // Include the specified properties
                 foreach (var includeProperty in includeProperties.Split
@@ -78,19 +76,14 @@ namespace Mercury.Server.Data
                 }
 
                 // Sort
-                if (orderBy != null)
-                {
-                    return orderBy(query).ToList();
-                }
-                else
-                {
-                    return await query.ToListAsync();
-                }
+                if (orderBy is not null) return orderBy(query).ToList();
+                else return await query.ToListAsync();
+
             }
             catch (Exception ex)
             {
-                var msg = ex.Message;
-                return null;
+                // log exception here
+                return new List<TEntity>();
             }
         }
 
@@ -101,14 +94,14 @@ namespace Mercury.Server.Data
         public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
             if (typeof(TEntity).Name.Contains("Search"))
-            { //todo: add GetSearch in interface and implement  
+            { 
                 // Use reflection to check if a corresponding EntitySearch function exists
                 var methodName = typeof(TEntity).Name;
                 var searchFunction = typeof(TDataContext).GetMethod(methodName);
                 if (searchFunction != null)
                 {
                     // If it exists, invoke it with null parameters (or adjust as needed)
-                    var result = searchFunction.Invoke(context, new object[] { null, null });
+                    var result = searchFunction.Invoke(context, new object[] { });
 
                     // Ensure result is IQueryable<TEntity>
                     if (result is IQueryable<TEntity> queryableResult)
@@ -117,18 +110,15 @@ namespace Mercury.Server.Data
                     }
                 }
             }
-
-            // If TEntity name does not contain "Search" or no method found, use the DbSet
-            //todo: error handling
             return await context.Set<TEntity>().ToListAsync();
         }
-        
+
         /// <summary>
         /// Gets an entity using its ID.
         /// </summary>
         /// <param name="id">ID of the entity to retrieve.</param>
         /// <returns>The entity if found; otherwise, null.</returns>
-        public virtual async Task<TEntity> GetByID(object id)
+        public virtual async Task<TEntity?> GetByID(object id)
         {
             return await dbSet.FindAsync(id);
         }
@@ -138,7 +128,7 @@ namespace Mercury.Server.Data
         /// </summary>
         /// <param name="entity">Entity to insert.</param>
         /// <returns>The inserted entity.</returns>
-        public virtual async Task<TEntity> Insert(TEntity entity)
+        public virtual async Task<TEntity?> Insert(TEntity entity)
         {
             await dbSet.AddAsync(entity);
             await context.SaveChangesAsync();
@@ -150,7 +140,7 @@ namespace Mercury.Server.Data
         /// </summary>
         /// <param name="entityToUpdate">Entity to update.</param>
         /// <returns>The updated entity.</returns>
-        public virtual async Task<TEntity> Update(TEntity entityToUpdate)
+        public virtual async Task<TEntity?> Update(TEntity entityToUpdate)
         {
             var dbSet = context.Set<TEntity>();
             dbSet.Attach(entityToUpdate);

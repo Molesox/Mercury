@@ -91,28 +91,31 @@ namespace Mercury.Client
             var jsonBytes = ParseBase64WithoutPadding(payload);
             var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
 
-            keyValuePairs.TryGetValue(ClaimTypes.Role, out object roles);
+            if (keyValuePairs is null) return claims;
 
-            if (roles != null)
+            keyValuePairs.TryGetValue(ClaimTypes.Role, out object? roles);
+
+            if (roles is not null)
             {
-                if (roles.ToString().Trim().StartsWith("["))
+                string rolesStr = roles.ToString()!;
+                if (rolesStr.Trim().StartsWith("["))
                 {
-                    var parsedRoles = JsonSerializer.Deserialize<string[]>(roles.ToString());
-
-                    foreach (var parsedRole in parsedRoles)
-                    {
-                        claims.Add(new Claim(ClaimTypes.Role, parsedRole));
-                    }
+                    var parsedRoles = JsonSerializer.Deserialize<string[]>(rolesStr);
+                    if (parsedRoles is not null)
+                        foreach (var parsedRole in parsedRoles)
+                        {
+                            claims.Add(new Claim(ClaimTypes.Role, parsedRole));
+                        }
                 }
                 else
                 {
-                    claims.Add(new Claim(ClaimTypes.Role, roles.ToString()));
+                    claims.Add(new Claim(ClaimTypes.Role, rolesStr));
                 }
 
                 keyValuePairs.Remove(ClaimTypes.Role);
             }
 
-            claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString())));
+            claims.AddRange(keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString() ?? "")));
 
             return claims;
         }

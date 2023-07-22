@@ -20,82 +20,92 @@ namespace Mercury.Client.Services
             primaryKeyName = _primaryKeyName;
         }
 
-
         public async Task<IEnumerable<TEntity>> GetAll()
         {
             try
             {
                 var result = await http.GetAsync(controllerName);
                 result.EnsureSuccessStatusCode();
+
                 string responseBody = await result.Content.ReadAsStringAsync();
                 var response = JsonConvert.DeserializeObject<APIListOfEntityResponse<TEntity>>(responseBody);
-                if (response.Success)
+                
+                if (response is not null && response.Success)
                     return response.Data;
                 else
                     return new List<TEntity>();
             }
             catch (Exception ex)
             {
-                return null;
+                return new List<TEntity>();
             }
         }
 
-        public async Task<TEntity> GetByID(object id)
+        public async Task<TEntity?> GetByID(object id)
         {
             try
             {
-                var arg = WebUtility.HtmlEncode(id.ToString());
-                var url = controllerName + "/" + arg;
+                var encodedID = WebUtility.HtmlEncode(id.ToString());
+                var url = @$"{controllerName}/{encodedID}";
+
                 var result = await http.GetAsync(url);
                 result.EnsureSuccessStatusCode();
+
                 string responseBody = await result.Content.ReadAsStringAsync();
                 var response = JsonConvert.DeserializeObject<APIEntityResponse<TEntity>>(responseBody);
-                if (response.Success)
+
+                if (response is not null && response.Success)
                     return response.Data;
                 else
                     return null;
             }
             catch (Exception ex)
             {
-                var msg = ex.Message;
+                // log error here
                 return null;
             }
         }
 
-        public async Task<TEntity> Insert(TEntity entity)
+        public async Task<TEntity?> Insert(TEntity entity)
         {
             try
             {
                 var result = await http.PostAsJsonAsync(controllerName, entity);
                 result.EnsureSuccessStatusCode();
+
                 string responseBody = await result.Content.ReadAsStringAsync();
                 var response = JsonConvert.DeserializeObject<APIEntityResponse<TEntity>>(responseBody);
-                if (response.Success)
-                    return response.Data;
+
+                if (response is not null && response.Success)
+                    return response.Data!;
                 else
                     return null;
             }
             catch (Exception ex)
             {
+                // log exception here
                 return null;
             }
         }
 
-        public async Task<TEntity> Update(TEntity entityToUpdate)
+        public async Task<TEntity?> Update(TEntity entityToUpdate)
         {
             try
             {
                 var result = await http.PutAsJsonAsync(controllerName, entityToUpdate);
                 result.EnsureSuccessStatusCode();
+
                 string responseBody = await result.Content.ReadAsStringAsync();
                 var response = JsonConvert.DeserializeObject<APIEntityResponse<TEntity>>(responseBody);
-                if (response.Success)
-                    return response.Data;
+
+                if (response is not null && response.Success)
+                    return response.Data!;
                 else
                     return null;
             }
             catch (Exception ex)
             {
+                // log exception here
                 return null;
             }
         }
@@ -104,19 +114,27 @@ namespace Mercury.Client.Services
         {
             try
             {
-                var value = entityToDelete.GetType()
-                    .GetProperty(primaryKeyName)
-                    .GetValue(entityToDelete, null)
-                    .ToString();
+                string? idFromEntity = default(string);
 
-                var arg = WebUtility.HtmlEncode(value);
-                var url = controllerName + "/" + arg;
+                var property = entityToDelete.GetType().GetProperty(primaryKeyName);
+                if (property is not null)
+                {
+                    var propertyValue = property.GetValue(entityToDelete);
+                    idFromEntity = propertyValue?.ToString();
+                }
+                if (idFromEntity is null) throw new Exception("Id missing from entity");
+
+                var encodedID = WebUtility.HtmlEncode(idFromEntity);
+                var url = $@"{controllerName}/{encodedID}";
+
                 var result = await http.DeleteAsync(url);
                 result.EnsureSuccessStatusCode();
+
                 return true;
             }
             catch (Exception ex)
             {
+                // log exception here
                 return false;
             }
         }
@@ -125,13 +143,17 @@ namespace Mercury.Client.Services
         {
             try
             {
-                var url = controllerName + "/" + WebUtility.HtmlEncode(id.ToString());
+                var encodedID = WebUtility.HtmlEncode(id.ToString());
+                var url = @$" {controllerName}/{encodedID}";
+
                 var result = await http.DeleteAsync(url);
                 result.EnsureSuccessStatusCode();
+
                 return true;
             }
             catch (Exception ex)
             {
+                // log exception here
                 return false;
             }
         }

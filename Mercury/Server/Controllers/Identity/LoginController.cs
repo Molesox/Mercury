@@ -64,9 +64,9 @@ namespace Mercury.Server.Controllers.Identity
 
             return Ok(new LoginResult { IsSuccesful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) });
         }
-        private BadRequestObjectResult CreateLoginFailureResponse(string? message= null)
-        {
 
+        private BadRequestObjectResult CreateLoginFailureResponse(string? message = null)
+        {
             return BadRequest(new LoginResult(message ?? "Something bad happend, please try again later.") { IsSuccesful = false });
         }
     }

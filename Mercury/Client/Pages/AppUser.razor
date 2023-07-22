@@ -3,7 +3,7 @@
 @using Mercury.Shared
 @using Mercury.Shared.Models;
 @using Mercury.Shared.Models.AspNetUser;
-@inject UserSearchManager UserSearchManager
+@inject AspNetUserManager AspNetUserManager
 @attribute [Authorize]
 
 <PageTitle>Asp Net Users</PageTitle>
@@ -12,7 +12,7 @@
 
 <RadzenText Text="Main information list" TextStyle="TextStyle.Subtitle1" />
 
-@if (userSearch == null)
+@if (aspNetUsers == null)
 {
     <RadzenLabel Text="Loading..." />
 }
@@ -23,7 +23,7 @@ else
             <RadzenDataGrid AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.SimpleWithMenu"
                             AllowVirtualization="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                             AllowFiltering="true" SelectionMode="DataGridSelectionMode.Multiple" Style="min-width:600;"
-            @ref="grid" Data="@userSearch" TItem="AspNetUser" ColumnWidth="200px">
+            @ref="grid" Data="@aspNetUsers" TItem="AspNetUser" ColumnWidth="200px">
                 <Columns>
                     <RadzenDataGridColumn TItem="AspNetUser" Property="Id" Title="User ID" Width="160px" />
                     <RadzenDataGridColumn TItem="AspNetUser" Property="UserName" Title="Username" Width="160px" />
@@ -62,8 +62,8 @@ else
 @code {
 
     RadzenDataGrid<AspNetUser>? grid;
-    IEnumerable<AspNetUser>? userSearch;
-    AspNetUser? User;
+    IEnumerable<AspNetUser>? aspNetUsers;
+    AspNetUser? user;
     string SearchName = "";
     string ErrorMessage = "";
     List<CommandGroupStr>? commandGroups;
@@ -122,16 +122,16 @@ else
         base.OnInitialized();
     }
 
-    async Task GetAllUserSearch()
+    async Task GetAllUsers()
     {
         ErrorMessage = "";
         try
         {
-            var result = await UserSearchManager.GetAspNetUsers();
+            var result = await AspNetUserManager.GetAll();
             if (result != null)
             {
-                userSearch = result;
-                User = null;
+                aspNetUsers = result;
+                user = null;
             }
             else
             {
@@ -146,6 +146,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await GetAllUserSearch();
+        await GetAllUsers();
     }
 }

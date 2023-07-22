@@ -46,23 +46,23 @@ namespace Mercury.Client.Services
         /// <returns>A task result that represents the asynchronous operation, containing the registration result.</returns>
         public async Task<RegisterResult> Register(RegisterModel registerModel)
         {
+            var failedResult = new RegisterResult("Something bad happened, try again later") { IsSuccesful = false };
             try
             {
                 var registerAsJson = JsonConvert.SerializeObject(registerModel); ;
 
                 var response = await _httpClient.PostAsync("api/Accounts", new StringContent(registerAsJson, Encoding.UTF8, "application/json"));
                 response.EnsureSuccessStatusCode();
+
                 var content = await response.Content.ReadAsStringAsync();
+                var registerResult = JsonConvert.DeserializeObject<RegisterResult>(content);
 
-                var result = JsonConvert.DeserializeObject<RegisterResult>(content);
-
-                return result;
+                return registerResult ?? failedResult;
             }
             catch (Exception e)
             {
-
-                Console.WriteLine(e.Message);
-                return new RegisterResult("Something bad happened, try again later") { IsSuccesful = false, };
+                // log exception here
+                return failedResult;
             }
         }
 
@@ -76,8 +76,11 @@ namespace Mercury.Client.Services
             try
             {
                 var loginAsJson = JsonConvert.SerializeObject(loginModel);
+
                 var response = await _httpClient.PostAsync("api/Login",
                     new StringContent(loginAsJson, Encoding.UTF8, "application/json"));
+                response.EnsureSuccessStatusCode();
+
                 var content = await response.Content.ReadAsStringAsync();
                 var loginResult = JsonConvert.DeserializeObject<LoginResult>(content);
 
@@ -87,19 +90,17 @@ namespace Mercury.Client.Services
                 }
 
                 await _localStorage.SetItemAsync("authToken", loginResult.Token);
-                ((ApiAuthenticationStateProvider)_authenticationStateProvider)
-                    .MarkUserAsAuthenticated(loginModel.Email);
-                _httpClient.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("bearer", loginResult.Token);
+
+                ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginModel.Email);
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
 
                 return loginResult;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                //log exception here
                 return new LoginResult("Something bad happended, try again later...") { IsSuccesful = false };
             }
-
-
         }
 
         /// <summary>

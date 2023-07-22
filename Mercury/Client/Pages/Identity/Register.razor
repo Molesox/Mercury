@@ -91,9 +91,7 @@
 @code {
     private RegisterModel registerModel = new RegisterModel() { ConfirmPassword = "", Email = "", Password = "" };
     private bool ShowErrors;
-    private IEnumerable<string> Errors;
-
-
+    private IEnumerable<string> Errors = new List<string>();
 
     private async Task HandleRegistration()
     {

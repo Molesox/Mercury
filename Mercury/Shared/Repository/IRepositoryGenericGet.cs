@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 
 namespace Mercury.Shared.Repository
 {
-    #region IRepositoryGenericGet interface
     /// <summary>
     /// The IRepositoryGenericGet interface provides the standard operations to be performed on a data repository for a given type,
     /// including a generic Get method.
@@ -25,12 +19,10 @@ namespace Mercury.Shared.Repository
         /// <param name="includeProperties">Properties to be included in the query result.</param>
         /// <returns>An IEnumerable of entities.</returns>
         Task<IEnumerable<TEntity>> Get(
-            Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Expression<Func<TEntity, bool>>? filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             string includeProperties = "");
             
         #endregion
     }
-    #endregion
-
 }
