@@ -1,35 +1,27 @@
-@* @typeparam TypeItem
+@typeparam TypeItem
+@if (Data is not null)
+{
+    <RadzenDataGrid AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.SimpleWithMenu"
+    AllowVirtualization="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+    AllowFiltering="true" SelectionMode="DataGridSelectionMode.Multiple" 
+    @ref="dataGrid" Data="@Data" TItem="TypeItem" ColumnWidth="200px">
+    <Columns>
+        @if (Data is not null)
+            {
+                var properties = typeof(TypeItem).GetProperties()
+                .Where(p => p.CustomAttributes.Any(a => a.AttributeType == typeof(VisibleAttribute)));
 
-<RadzenRow class="rz-m-3" Style="heigh:50%">
-    <RadzenColumn Size="9">
-        <RadzenDataGrid AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.SimpleWithMenu"
-            AllowVirtualization="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-            AllowFiltering="true" SelectionMode="DataGridSelectionMode.Multiple" Style="min-width:600; min-height:100%"
-        @ref="dataGrid" Data="@Data" TItem="TypeItem" ColumnWidth="200px">
-            <Columns>
-                <RadzenDataGridColumn TItem="AspNetRole" Property="Id" Title="Role ID" Width="160px" />
-                <RadzenDataGridColumn TItem="AspNetRole" Property="Name" Title="Role Name" Width="160px" />
-                <RadzenDataGridColumn TItem="AspNetRole" Property="NormalizedName" Title="Normalized Role Name"
-                    Width="200px" />
-                <RadzenDataGridColumn TItem="AspNetRole" Property="ConcurrencyStamp" Title="Concurrency Stamp"
-                    Width="160px" />
-            </Columns>
-
-        </RadzenDataGrid>
-    </RadzenColumn>
-    <RadzenColumn Size="3">
-
-        <RadzenDataList AllowVirtualization="true" Style="height:400px;overflow:auto;" Data="@commandGroupsRoles"
-            TItem="CommandGroupStr">
-            <Template Context="command">
-                <CommandGroup GroupStr="command" />
-            </Template>
-        </RadzenDataList>
-
-    </RadzenColumn>
-</RadzenRow>
-
-
+                foreach (var prop in properties)
+                {
+                    <RadzenDataGridColumn TItem="TypeItem" Property="@prop.Name" Title="@prop.Name" Width="160px" />
+                }
+            }
+        </Columns>
+        <EmptyTemplate>
+            <RadzenText style="font-size: 24px; text-align: center; margin: 2rem;">No records to display.</RadzenText>
+        </EmptyTemplate>
+    </RadzenDataGrid>
+}
 @code {
 
     [Parameter]
@@ -37,4 +29,4 @@
 
     RadzenDataGrid<TypeItem>? dataGrid;
 
-} *@
+}

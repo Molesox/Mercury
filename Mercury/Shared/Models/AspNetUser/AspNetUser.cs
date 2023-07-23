@@ -7,14 +7,17 @@ public partial class AspNetUser
 {
     public string Id { get; set; } = null!;
 
+    [Visible]
     public string? UserName { get; set; }
 
     public string? NormalizedUserName { get; set; }
 
+    [Visible]
     public string? Email { get; set; }
 
     public string? NormalizedEmail { get; set; }
 
+    [Visible]
     public bool EmailConfirmed { get; set; }
 
     public string? PasswordHash { get; set; }
@@ -23,16 +26,20 @@ public partial class AspNetUser
 
     public string? ConcurrencyStamp { get; set; }
 
+    [Visible]
     public string? PhoneNumber { get; set; }
 
+    [Visible]
     public bool PhoneNumberConfirmed { get; set; }
 
+    [Visible]
     public bool TwoFactorEnabled { get; set; }
 
     public DateTimeOffset? LockoutEnd { get; set; }
 
     public bool LockoutEnabled { get; set; }
 
+    [Visible]
     public int AccessFailedCount { get; set; }
 
     public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; } = new List<AspNetUserClaim>();
