@@ -2,11 +2,11 @@
 @if (Data is not null)
 {
     <RadzenDataGrid AllowColumnResize="true" AllowAlternatingRows="false" FilterMode="FilterMode.SimpleWithMenu"
-    AllowVirtualization="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-    AllowFiltering="true" SelectionMode="DataGridSelectionMode.Multiple" 
-    @ref="dataGrid" Data="@Data" TItem="TypeItem" ColumnWidth="200px">
-    <Columns>
-        @if (Data is not null)
+                    AllowVirtualization="true" AllowSorting="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    AllowFiltering="true" SelectionMode="DataGridSelectionMode.Multiple"
+                    @ref="dataGrid" Data="@Data" TItem="TypeItem" Style="height: 50vh;">
+        <Columns>
+            @if (Data is not null)
             {
                 var properties = typeof(TypeItem).GetProperties()
                 .Where(p => p.CustomAttributes.Any(a => a.AttributeType == typeof(VisibleAttribute)));

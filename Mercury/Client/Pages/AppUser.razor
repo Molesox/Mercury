@@ -23,30 +23,30 @@ else
 
 
 <RadzenStack  >
-        <RadzenRow >
-            <RadzenColumn Size="9">
+        <RadzenRow  class="rz-mt-5">
+            <RadzenColumn Size="9" SizeLG="10">
                 <GridCommands Data=@aspNetUsers />
             </RadzenColumn>
-            <RadzenColumn Size="3">
-
-                <RadzenDataList AllowVirtualization="true"  Style="overflow:auto;"
-                    Data="@commandGroupsUsers" TItem="CommandGroupStr">
-                    <Template Context="command">
-                        <CommandGroup GroupStr="command" />
-                    </Template>
-                </RadzenDataList>
+            <RadzenColumn  Size="3" SizeLG="2">
+               
+                    <RadzenDataList AllowVirtualization="true" Style="height: 50vh; overflow: auto;"
+                                    Data="@commandGroupsUsers" TItem="CommandGroupStr">
+                        <Template Context="command">
+                            <CommandGroup GroupStr="command" />
+                        </Template>
+                    </RadzenDataList>
 
 
             </RadzenColumn>
         </RadzenRow>
 
         <RadzenRow class="rz-mt-5" >
-            <RadzenColumn Size="9">
+            <RadzenColumn Size="9" SizeLG="10">
                 <GridCommands Data=@aspNetRoles />
             </RadzenColumn>
-            <RadzenColumn Size="3">
+            <RadzenColumn  Size="3" SizeLG="2">
 
-                <RadzenDataList AllowVirtualization="true" Style="overflow:auto;"
+                <RadzenDataList AllowVirtualization="true"  Style="height: 50vh;overflow: auto;"
                     Data="@commandGroupsRoles" TItem="CommandGroupStr">
                     <Template Context="command">
                         <CommandGroup GroupStr="command" />
