@@ -1,4 +1,4 @@
-﻿using Mercury.Shared.Identity;
+﻿using Mercury.Shared.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,10 +1,12 @@
 ﻿@page "/login"
-@using Mercury.Shared.Identity;
+@layout AuthLayout
+@using Mercury.Client.Shared.Layouts;
+@using Mercury.Shared.Services;
+@using Mercury.Shared.Models.Identity;
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
 
-<RadzenCard>
-    <ChildContent>
+ 
         <RadzenContent>
             <RadzenRow Gap="0" Class="rz-my-12 rz-mx-auto rz-border-radius-6 rz-shadow-10" Style="width: 100%; max-width: 800px; overflow: hidden;">
                 <RadzenColumn Size="12" SizeMD="6">
@@ -19,10 +21,10 @@
                         <RadzenText TextStyle="TextStyle.H5" TagName="TagName.H2" Class="rz-mb-6">
                             Login
                         </RadzenText>
-           
+
                         <RadzenTemplateForm EditContext="@editContext" InvalidSubmit="@(args => OnInvalidSubmit(args))" Data=@loginModel TItem="LoginModel">
                             <DataAnnotationsValidator />
-                           
+
                             <RadzenLogin AllowRememberMe="true"
                                          Password="@loginModel.Password"
                                          Username="@loginModel.Email"
@@ -31,7 +33,6 @@
                                          Login="@(async args =>  await HandleLogin(args))"
                                          RegisterText="Register"
                                          AllowResetPassword="false"
-                                         
                                          Register="@(()=>NavigationManager.NavigateTo("/Register"))" />
                         </RadzenTemplateForm>
                     </RadzenCard>
@@ -45,11 +46,11 @@
                 </RadzenAlert>
             }
         </RadzenContent>
-    </ChildContent>
-</RadzenCard>
+ 
+
 
 @code {
-    public LoginModel loginModel= new LoginModel() { Email = "mercury@galaxia.ia", Password = "Mgalaxia.ia420" };
+    public LoginModel loginModel = new LoginModel() { Email = "mercury@galaxia.ia", Password = "Mgalaxia.ia420" };
     [CascadingParameter]
     EditContext editContext { get; set; }
 
@@ -86,12 +87,12 @@
                 RememberMe = args.RememberMe
             };
 
- 
+
         if (!editContext.Validate())
-          {
+        {
             ShowValidationError = true;
             ValidationErrors = editContext.GetValidationMessages();
-          }
+        }
 
         var result = await AuthService.Login(loginModel);
 

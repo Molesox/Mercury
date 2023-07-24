@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Mercury.Shared.Identity
+namespace Mercury.Shared.Models.Identity
 {
     /// <summary>
     /// Represents a model for registering a user, containing email, password and password confirmation.

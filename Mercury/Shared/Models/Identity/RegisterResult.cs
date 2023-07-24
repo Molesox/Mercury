@@ -5,16 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Mercury.Shared.Base;
 
-namespace Mercury.Shared.Identity
+namespace Mercury.Shared.Models.Identity
 {
     /// <summary>
     /// Represents the result of a registration attempt.
     /// </summary>
     public class RegisterResult : ResponseBase
     {
-        public RegisterResult(string errorMessage=""):base(errorMessage)
+        public RegisterResult(string errorMessage = "") : base(errorMessage)
         {
-            
+
         }
     }
 }

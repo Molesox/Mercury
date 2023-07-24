@@ -1,10 +1,18 @@
-﻿@inject IConfiguration Configuration
-
+﻿@using Mercury.Client.Shared.Layouts;
+@inject IConfiguration Configuration
+@inject NavigationManager NavigationManager
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-          
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    @{
+                        NavigationManager.NavigateTo("/login", forceLoad:true);
+                    }
+                </NotAuthorized>
+            </AuthorizeRouteView>
+           
+
         </Found>
         <NotFound>
             <PageTitle>Not found</PageTitle>

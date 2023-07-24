@@ -1,6 +1,6 @@
-﻿using Mercury.Shared.Identity;
+﻿using Mercury.Shared.Models.Identity;
 
-namespace Mercury.Client.Services
+namespace Mercury.Shared.Services
 {
     /// <summary>
     /// Defines the contract for an authentication service.

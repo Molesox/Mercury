@@ -1,11 +1,12 @@
-﻿using Mercury.Shared.Identity;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Blazored.LocalStorage;
 using Newtonsoft.Json;
 
 using System.Text;
 using Microsoft.AspNetCore.Components.Authorization;
+using Mercury.Shared.Services;
+using Mercury.Shared.Models.Identity;
 
 namespace Mercury.Client.Services
 {

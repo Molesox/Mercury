@@ -1,6 +1,7 @@
 using Blazored.LocalStorage;
 using Mercury.Client;
 using Mercury.Client.Services;
+using Mercury.Shared.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;

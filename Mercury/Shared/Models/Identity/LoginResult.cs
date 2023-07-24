@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Mercury.Shared.Base;
 
-namespace Mercury.Shared.Identity
+namespace Mercury.Shared.Models.Identity
 {
     /// <summary>
     /// Represents the result of a login attempt.
     /// </summary>
     public class LoginResult : ResponseBase
     {
-        public LoginResult(string errorMessage="") : base(errorMessage)
+        public LoginResult(string errorMessage = "") : base(errorMessage)
         {
 
         }

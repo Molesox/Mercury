@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Mercury.Shared.Identity
+namespace Mercury.Shared.Models.Identity
 {
     /// <summary>
     /// Represents a model for the login functionality.
@@ -27,7 +27,7 @@ namespace Mercury.Shared.Identity
         /// Gets or sets a value indicating whether the user should be remembered.
         /// </summary>
         /// <value>True if the user wants to be remembered, false otherwise.</value>
-        public bool RememberMe { get; set; } 
+        public bool RememberMe { get; set; }
     }
 
 }
