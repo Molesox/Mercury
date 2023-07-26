@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using Mercury.Shared.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -9,7 +10,7 @@ namespace Mercury.Client
     /// <summary>
     /// Represents the API authentication state provider for the application, derived from <see cref="AuthenticationStateProvider"/>.
     /// </summary>
-    public class ApiAuthenticationStateProvider : AuthenticationStateProvider
+    public class ApiAuthenticationStateProvider : AuthenticationStateProvider, ICustomAuthenticationStateProvider
     {
         private readonly HttpClient _httpClient;
         private readonly ILocalStorageService _localStorage;
@@ -137,4 +138,5 @@ namespace Mercury.Client
 
         #endregion
     }
+
 }

@@ -25,8 +25,19 @@ builder.Services.AddBlazoredLocalStorage();
 
 // Adds AuthorizationCore services to the DI container.
 builder.Services.AddAuthorizationCore();
+
+#if DEBUG
+builder.Services.AddScoped<AuthenticationStateProvider,
+    ApiFakeAuthenticationStateProvider>();
+builder.Services.AddScoped<ICustomAuthenticationStateProvider, ApiFakeAuthenticationStateProvider>();
+#else
+
 builder.Services.AddScoped<AuthenticationStateProvider,
     ApiAuthenticationStateProvider>();
+    builder.Services.AddScoped<ICustomAuthenticationStateProvider, ApiAuthenticationStateProvider>();
+#endif
+
+
 
 // Adds the AuthService to the DI container.
 builder.Services.AddScoped<IAuthService, AuthService>();

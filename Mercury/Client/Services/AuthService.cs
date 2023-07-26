@@ -16,7 +16,7 @@ namespace Mercury.Client.Services
     public class AuthService : IAuthService
     {
         private readonly HttpClient _httpClient;
-        private readonly AuthenticationStateProvider _authenticationStateProvider;
+        private readonly ICustomAuthenticationStateProvider _authenticationStateProvider;
         private readonly ILocalStorageService _localStorage;
 
         #region Ctor
@@ -28,7 +28,7 @@ namespace Mercury.Client.Services
         /// <param name="authenticationStateProvider">An instance of AuthenticationStateProvider for managing user authentication state.</param>
         /// <param name="localStorage">An instance of ILocalStorageService for handling local storage operations.</param>
         public AuthService(HttpClient httpClient,
-                           AuthenticationStateProvider authenticationStateProvider,
+                           ICustomAuthenticationStateProvider authenticationStateProvider,
                            ILocalStorageService localStorage)
         {
             _httpClient = httpClient;
@@ -48,6 +48,13 @@ namespace Mercury.Client.Services
         public async Task<RegisterResult> Register(RegisterModel registerModel)
         {
             var failedResult = new RegisterResult("Something bad happened, try again later") { IsSuccesful = false };
+
+#if DEBUG
+            // In a debug environment, simulate successful registration
+            await Task.Delay(1000); // simulate some delay
+            return new RegisterResult() { IsSuccesful = true };
+#else
+
             try
             {
                 var registerAsJson = JsonConvert.SerializeObject(registerModel); ;
@@ -65,6 +72,7 @@ namespace Mercury.Client.Services
                 // log exception here
                 return failedResult;
             }
+#endif
         }
 
         /// <summary>
@@ -74,6 +82,15 @@ namespace Mercury.Client.Services
         /// <returns>A task result that represents the asynchronous operation, containing the login result. A successful login stores the JWT token in local storage and sets the user as authenticated.</returns>
         public async Task<LoginResult> Login(LoginModel loginModel)
         {
+#if DEBUG
+            // In a debug environment, simulate successful login
+            await Task.Delay(1000); // simulate some delay
+            var fakeToken = "FakeJwtToken"; // replace with a fake JWT if needed
+            await _localStorage.SetItemAsync("authToken", fakeToken);
+            ((ICustomAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginModel.Email);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", fakeToken);
+            return new LoginResult( ) { IsSuccesful = true, Token = fakeToken };
+#else
             try
             {
                 var loginAsJson = JsonConvert.SerializeObject(loginModel);
@@ -92,7 +109,7 @@ namespace Mercury.Client.Services
 
                 await _localStorage.SetItemAsync("authToken", loginResult.Token);
 
-                ((ApiAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginModel.Email);
+                ((ICustomAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginModel.Email);
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", loginResult.Token);
 
                 return loginResult;
@@ -102,6 +119,7 @@ namespace Mercury.Client.Services
                 //log exception here
                 return new LoginResult("Something bad happended, try again later...") { IsSuccesful = false };
             }
+#endif
         }
 
         /// <summary>
@@ -111,11 +129,11 @@ namespace Mercury.Client.Services
         public async Task Logout()
         {
             await _localStorage.RemoveItemAsync("authToken");
-            ((ApiAuthenticationStateProvider)_authenticationStateProvider)
+            ((ICustomAuthenticationStateProvider)_authenticationStateProvider)
                 .MarkUserAsLoggedOut();
             _httpClient.DefaultRequestHeaders.Authorization = null;
         }
 
-        #endregion
+#endregion
     }
 }
