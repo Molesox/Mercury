@@ -1,0 +1,33 @@
+﻿@page "/userperfil"
+@using Mercury.Shared.Services;
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+@inherits LayoutComponentBase
+
+<RadzenCard class="my-4">
+    <RadzenRow JustifyContent="@justifyContent" AlignItems="@alignItems" Gap="@gap" class="rz-border-info-light">
+        <RadzenButton Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary"/>
+        <RadzenText Text="Usuario"/>
+    </RadzenRow>
+    <RadzenRow>
+        <RadzenButton  Text="Mi perfil"/>
+    </RadzenRow>
+    <RadzenRow>
+        <NavLink href="Logout">
+            <RadzenButton Text="Logout" />
+        </NavLink>
+    </RadzenRow>
+
+</RadzenCard>
+
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await AuthService.Logout();
+        NavigationManager.NavigateTo("/userperfil");
+    }
+
+}
+
