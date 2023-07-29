@@ -1,17 +1,1 @@
-﻿<AuthorizeView>
-    <Authorized>
-        <NavLink href="LogOut">
-            <RadzenButton Text="Logout" ButtonStyle="ButtonStyle.Secondary"/>
-        </NavLink>
-    </Authorized>
-    <NotAuthorized>
-        <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem">
-            <NavLink href="Register">
-                <RadzenButton Text="Register" ButtonStyle="ButtonStyle.Primary" />
-            </NavLink>
-            <NavLink   href="Login">
-                <RadzenButton Text="Login" ButtonStyle="ButtonStyle.Primary" />
-            </NavLink>
-        </RadzenRow>
-    </NotAuthorized>
-</AuthorizeView>
+﻿<Mercury.Client.Components.UserMenu/>
