@@ -1,6 +1,4 @@
-﻿<AuthorizeView>
-    <Authorized>
-        <RadzenProfileMenu>
+﻿<RadzenProfileMenu>
             <Template>
                 <RadzenImage Path="Images/photodani.jpg" Style="width: 35px; height: 35px; border-radius: 50%;" />
             </Template>
@@ -28,15 +26,3 @@
                 </RadzenStack>
             </ChildContent>
         </RadzenProfileMenu>
-    </Authorized>
-    <NotAuthorized>
-        <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem">
-            <NavLink href="Register">
-                <RadzenButton Text="Register" ButtonStyle="ButtonStyle.Primary" />
-            </NavLink>
-            <NavLink href="Login">
-                <RadzenButton Text="Login" ButtonStyle="ButtonStyle.Primary" />
-            </NavLink>
-        </RadzenRow>
-    </NotAuthorized>
-</AuthorizeView>
