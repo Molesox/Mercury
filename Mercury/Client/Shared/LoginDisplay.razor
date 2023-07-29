@@ -6,14 +6,28 @@
                 </RadzenGravatar>
             </Template>
             <ChildContent>
-                <RadzenCard>
-                    <RadzenRow>
-                        <RadzenImage Path="Images/photo_dani.jpg"></RadzenImage>
-                        <RadzenText Text="David Tortosa Codoñer"></RadzenText>
-                    </RadzenRow>
-                </RadzenCard>
-                <RadzenProfileMenuItem Text="Mi perfil" Path="Perfil" Icon="face"></RadzenProfileMenuItem>
-                <RadzenProfileMenuItem  Text="Logout" Path="Logout" Icon="exit_to_app"></RadzenProfileMenuItem>
+                <RadzenStack Gap="0">
+
+                    <RadzenCard Class="rz-background-color-base-700 rz-border-color-white  rz-m-2">
+                        <RadzenStack Orientation="Orientation.Horizontal">
+
+                            <RadzenImage Path="Images/photo_dani.jpg"
+                                Style="width: 65px; height: 65px; border-radius: 50%;" />
+                            <RadzenStack Gap="0">
+
+                                <RadzenText TextStyle="TextStyle.H6" Text="David Tortosa Codoñer"></RadzenText>
+                                <RadzenText Text="david.tortosa@gmail.com"></RadzenText>
+                            </RadzenStack>
+                        </RadzenStack>
+                    </RadzenCard>
+                    <NavLink  Class="rz-m-2" href="Perfil">
+
+                    <RadzenButton  Style="width:100%" Text="Mi perfil" Icon="face" />
+                    </NavLink>
+                    <NavLink Class="rz-m-2" href="Logout">
+                        <RadzenButton  Style="width:100%;" Text="Logout" Icon="exit_to_app" ButtonStyle="ButtonStyle.Secondary" />
+                    </NavLink>
+                </RadzenStack>
             </ChildContent>
         </RadzenProfileMenu>
     </Authorized>
@@ -22,7 +36,7 @@
             <NavLink href="Register">
                 <RadzenButton Text="Register" ButtonStyle="ButtonStyle.Primary" />
             </NavLink>
-            <NavLink   href="Login">
+            <NavLink href="Login">
                 <RadzenButton Text="Login" ButtonStyle="ButtonStyle.Primary" />
             </NavLink>
         </RadzenRow>
