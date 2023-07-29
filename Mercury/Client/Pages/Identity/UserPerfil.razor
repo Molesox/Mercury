@@ -5,18 +5,21 @@
 @inherits LayoutComponentBase
 
 <RadzenCard class="my-4">
-    <RadzenRow JustifyContent="@justifyContent" AlignItems="@alignItems" Gap="@gap" class="rz-border-info-light">
-        <RadzenButton Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary"/>
-        <RadzenText Text="Usuario"/>
-    </RadzenRow>
-    <RadzenRow>
-        <RadzenButton  Text="Mi perfil"/>
-    </RadzenRow>
-    <RadzenRow>
-        <NavLink href="Logout">
-            <RadzenButton Text="Logout" />
-        </NavLink>
-    </RadzenRow>
+    <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="1rem" Wrap="FlexWrap.Wrap">
+        <RadzenRow AlignItems="AlignItems.Normal" JustifyContent="JustifyContent.Normal" Gap="10rem">
+            <RadzenButton Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary" />
+            <RadzenText Text="Usuario" TextAlign="TextAlign.Center" />
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenButton Text="Mi perfil" ButtonStyle="ButtonStyle.Primary" />
+        </RadzenRow>
+        <RadzenRow>
+            <NavLink href="Logout">
+                <RadzenButton Text="Logout" />
+            </NavLink>
+        </RadzenRow>
+    </RadzenStack>
+    
 
 </RadzenCard>
 

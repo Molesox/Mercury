@@ -2,7 +2,17 @@
     <Authorized>
         <RadzenButton Variant="Variant.Text" Text="Gmail" />
         <RadzenButton Variant="Variant.Text" Text="Images" />
-        <RadzenButton Variant="Variant.Text"><RadzenIcon Icon="apps" IconStyle="IconStyle.Primary" /></RadzenButton>
+        <RadzenProfileMenu>
+        <Template>
+            <RadzenGravatar Email="user@example.com">
+            </RadzenGravatar>
+        </Template>
+        <ChildContent>
+            <RadzenProfileMenuItem Text="David Tortosa Codoñer" Icon="account_circle"></RadzenProfileMenuItem>
+            <RadzenProfileMenuItem Text="Mi perfil" Icon="face"></RadzenProfileMenuItem>
+            <RadzenProfileMenuItem  Text="Logout" Path="Logout" Icon="exit_to_app"></RadzenProfileMenuItem>
+        </ChildContent>
+    </RadzenProfileMenu>
         <NavLink href="UserPerfil">
             <RadzenButton Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary"/>
         </NavLink>
