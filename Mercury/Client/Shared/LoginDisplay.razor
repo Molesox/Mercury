@@ -1,21 +1,21 @@
 ﻿<AuthorizeView>
     <Authorized>
-        <RadzenButton Variant="Variant.Text" Text="Gmail" />
-        <RadzenButton Variant="Variant.Text" Text="Images" />
         <RadzenProfileMenu>
-        <Template>
-            <RadzenGravatar Email="user@example.com">
-            </RadzenGravatar>
-        </Template>
-        <ChildContent>
-            <RadzenProfileMenuItem Text="David Tortosa Codoñer" Icon="account_circle"></RadzenProfileMenuItem>
-            <RadzenProfileMenuItem Text="Mi perfil" Icon="face"></RadzenProfileMenuItem>
-            <RadzenProfileMenuItem  Text="Logout" Path="Logout" Icon="exit_to_app"></RadzenProfileMenuItem>
-        </ChildContent>
-    </RadzenProfileMenu>
-        <NavLink href="UserPerfil">
-            <RadzenButton Icon="add_circle_outline" ButtonStyle="ButtonStyle.Primary"/>
-        </NavLink>
+            <Template>
+                <RadzenGravatar Email="user@example.com">
+                </RadzenGravatar>
+            </Template>
+            <ChildContent>
+                <RadzenCard>
+                    <RadzenRow>
+                        <RadzenImage Path="Images/photo_dani.jpg"></RadzenImage>
+                        <RadzenText Text="David Tortosa Codoñer"></RadzenText>
+                    </RadzenRow>
+                </RadzenCard>
+                <RadzenProfileMenuItem Text="Mi perfil" Path="Perfil" Icon="face"></RadzenProfileMenuItem>
+                <RadzenProfileMenuItem  Text="Logout" Path="Logout" Icon="exit_to_app"></RadzenProfileMenuItem>
+            </ChildContent>
+        </RadzenProfileMenu>
     </Authorized>
     <NotAuthorized>
         <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem">
