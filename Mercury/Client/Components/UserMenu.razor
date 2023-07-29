@@ -1,0 +1,42 @@
+﻿<AuthorizeView>
+    <Authorized>
+        <RadzenProfileMenu>
+            <Template>
+                <RadzenImage Path="Images/photodani.jpg" Style="width: 35px; height: 35px; border-radius: 50%;" />
+            </Template>
+            <ChildContent>
+                <RadzenStack Gap="0">
+
+                    <RadzenCard Class="rz-background-color-base-700 rz-border-color-white rz-shadow-10 rz-m-2">
+                        <RadzenStack Orientation="Orientation.Horizontal" Gap="1em">
+
+                            <RadzenImage Path="Images//photodani.jpg"
+                                         Style="width: 65px; height: 65px; border-radius: 50%;" />
+                            <RadzenStack Gap="0">
+                                <RadzenText TextStyle="TextStyle.H6" Text="David Tortosa Codoñer"></RadzenText>
+                                <RadzenText Text="david.tortosa@gmail.com"></RadzenText>
+                            </RadzenStack>
+                        </RadzenStack>
+                    </RadzenCard>
+                    <NavLink Class="rz-mx-2 rz-my-1" href="UserProfile">
+                        <RadzenButton Style="width:100%" Text="Mi perfil" Icon="face" />
+                    </NavLink>
+                    <NavLink Class="rz-mx-2 rz-my-1" href="Logout">
+                        <RadzenButton Style="width:100%;" Text="Logout" Icon="exit_to_app"
+                                      ButtonStyle="ButtonStyle.Secondary" />
+                    </NavLink>
+                </RadzenStack>
+            </ChildContent>
+        </RadzenProfileMenu>
+    </Authorized>
+    <NotAuthorized>
+        <RadzenRow AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap" Gap="1rem">
+            <NavLink href="Register">
+                <RadzenButton Text="Register" ButtonStyle="ButtonStyle.Primary" />
+            </NavLink>
+            <NavLink href="Login">
+                <RadzenButton Text="Login" ButtonStyle="ButtonStyle.Primary" />
+            </NavLink>
+        </RadzenRow>
+    </NotAuthorized>
+</AuthorizeView>

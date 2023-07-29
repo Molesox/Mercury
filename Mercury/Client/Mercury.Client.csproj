@@ -26,7 +26,11 @@
     <None Remove="NewFolder\**" />
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="wwwroot\Images\photodani.jpg" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="..\..\.editorconfig" Link=".editorconfig" />
+    <None Include="wwwroot\Images\photodani.jpg" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.3.0" />
@@ -43,6 +47,10 @@
 
   <ItemGroup>
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>
