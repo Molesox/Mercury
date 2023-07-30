@@ -2,36 +2,44 @@
 @using Mercury.Shared.Services;
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
+@inject ThemeService ThemeService
+@inject IJSRuntime JSRuntime
 
-<RadzenCard Class="rz-my-12 rz-mx-auto" Style="max-width: 420px">
-    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
-        <RadzenImage Path="Images//photodani.jpg" Style="width: 100px; height: 100px; border-radius: 50%;"></RadzenImage>
-        <RadzenStack Gap="0">
-            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Employee</RadzenText>
-            <RadzenText TextStyle="TextStyle.Body1"><b>David Tortosa Codoñer</b></RadzenText>
-            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">Company</RadzenText>
-            <RadzenText TextStyle="TextStyle.Body1"><b>GALAX.IA SA</b></RadzenText>
+
+<PageTitle>User profile</PageTitle>
+<RadzenText Text="My profile" TextStyle="TextStyle.DisplayH3" />
+
+<RadzenDropDown Class="rz-mx-0 rz-mx-lg-4" id="themes" style="width: 220px;" TValue="string" TextProperty="Text"
+                ValueProperty="Value" Data="@ThemeService.Themes" Value="@ThemeService.CurrentTheme" Change="@ChangeTheme">
+    <ValueTemplate>
+        @context.Text Theme
+    </ValueTemplate>
+    <Template>
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
+            <svg width="80" height="60" viewBox="0 0 80 60" fill="none" xmlns="http://www.w3.org/2000/svg"
+                 style="border-radius: 4px; overflow: hidden; outline: var(--rz-border-disabled); min-width: 80px;">
+                <rect width="80" height="60" fill="@context.Base" />
+                <rect x="0" y="4" width="16" height="56" fill="@context.Sidebar" />
+                <rect x="24" y="17" width="48" height="32" rx="2" fill="@context.Content" />
+                <rect x="43" y="41" width="12" height="4" rx="1" fill="@context.Secondary" />
+                <rect x="28" y="21" width="16" height="2" rx="1" fill="@context.TitleText" />
+                <rect x="28" y="27" width="40" height="2" rx="1" fill="@context.ContentText" />
+                <rect x="28" y="31" width="40" height="2" rx="1" fill="@context.ContentText" />
+                <rect x="28" y="35" width="16" height="2" rx="1" fill="@context.ContentText" />
+                <rect x="28" y="41" width="12" height="4" rx="1" fill="@context.Primary" />
+                <rect width="80" height="6" fill="@context.Header" />
+            </svg>
+            @context.Text
+
         </RadzenStack>
-    </RadzenStack>
-    <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
-        <RadzenText TextStyle="TextStyle.H6" class="rz-color-on-primary-light"><strong>Delivery Information</strong></RadzenText>
-        <RadzenRow RowGap="0">
-            <RadzenColumn>
-                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Country</RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>España</b></RadzenText>
-                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Email</RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>pintajarto@gmail.com</b></RadzenText>
-            </RadzenColumn>
-            <RadzenColumn>
-                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">City</RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>Valencia</b></RadzenText>
-                <RadzenText TextStyle="TextStyle.Overline" class="rz-color-on-primary-light rz-display-flex rz-mt-4 rz-mb-0">Movil</RadzenText>
-                <RadzenText TextStyle="TextStyle.Body1" class="rz-color-on-primary-light"><b>633445553</b></RadzenText>
-            </RadzenColumn>
-        </RadzenRow>
-    </RadzenCard>
-</RadzenCard>
+    </Template>
+</RadzenDropDown>
+
 
 @code {
 
+    void ChangeTheme(object value)
+    {
+        ThemeService.Change(value as string);
+    }
 }
