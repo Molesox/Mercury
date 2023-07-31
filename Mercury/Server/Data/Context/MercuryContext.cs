@@ -1,46 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mercury.Shared.Models;
 using Mercury.Shared.Models.AspNetUser;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 
 namespace Mercury.Server.Data.Context;
 
-public partial class MercuryDevContext : DbContext
+public partial class MercuryContext : DbContext
 {
-
-    #region Ctors
-
-    public MercuryDevContext()
+    public MercuryContext()
     {
     }
 
-    public MercuryDevContext(DbContextOptions<MercuryDevContext> options)
+    public MercuryContext(DbContextOptions<MercuryContext> options)
         : base(options)
     {
     }
 
-    #endregion
-
     public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
-    public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
-    public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
-    public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-    public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-    public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
-    public virtual DbSet<UserSearch> UserSearches { get; set; }
 
-    public IQueryable<UserSearch> UserSearch(string UserName, string Email) =>
-        FromExpression(() => UserSearch(UserName, Email));
+    public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
+
+    public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+
+    public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+
+    public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+
+    public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseNpgsql("Server=localhost;Port=5432;User Id=mercury;Password=mercuryM31_dev;Database=Mercury;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<AspNetRole>(entity =>
         {
-            entity.HasIndex(e => e.NormalizedName, "RoleNameIndex")
-                .IsUnique()
-                .HasFilter("([NormalizedName] IS NOT NULL)");
+            entity.HasIndex(e => e.NormalizedName, "RoleNameIndex").IsUnique();
 
             entity.Property(e => e.Name).HasMaxLength(256);
             entity.Property(e => e.NormalizedName).HasMaxLength(256);
@@ -57,11 +53,7 @@ public partial class MercuryDevContext : DbContext
         {
             entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
 
-            entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex")
-                .IsUnique()
-                .HasFilter("([NormalizedUserName] IS NOT NULL)");
-
-            entity.HasIndex(e => e.Email, "idx_AspNetUsers_Email");
+            entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex").IsUnique();
 
             entity.Property(e => e.Email).HasMaxLength(256);
             entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
@@ -110,11 +102,8 @@ public partial class MercuryDevContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.AspNetUserTokens).HasForeignKey(d => d.UserId);
         });
 
-        modelBuilder.Entity<UserSearch>().ToTable("UserSearch");
-        modelBuilder.HasDbFunction(typeof(MercuryDevContext).GetMethod(nameof(UserSearch), new[] { typeof(string), typeof(string) }));
         OnModelCreatingPartial(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
 }

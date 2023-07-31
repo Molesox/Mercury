@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Mercury.Shared.Models.AspNetUser;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Mercury.Server.Data
+namespace Mercury.Server.Data.Context
 {
     /// <summary>
     /// Represents the database context for the application, derived from IdentityDbContext.
     /// </summary>
-    public class ApplicationDbContext : IdentityDbContext
+    public partial class ApplicationDbContext : IdentityDbContext
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationDbContext"/> class.
@@ -16,5 +17,4 @@ namespace Mercury.Server.Data
         {
         }
     }
-
 }

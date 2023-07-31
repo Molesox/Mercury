@@ -11,9 +11,9 @@ namespace Mercury.Server.Controllers
     [Route("[controller]")]
     public class AppUsersController : ControllerBase
     {
-        RepositoryEF<AspNetUser, MercuryDevContext> _aspNetUserManager;
+        RepositoryEF<AspNetUser, MercuryContext> _aspNetUserManager;
 
-        public AppUsersController(RepositoryEF<AspNetUser, MercuryDevContext> aspnetManager)
+        public AppUsersController(RepositoryEF<AspNetUser, MercuryContext> aspnetManager)
         {
             _aspNetUserManager = aspnetManager;
         }

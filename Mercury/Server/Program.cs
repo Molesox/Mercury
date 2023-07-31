@@ -21,10 +21,11 @@ builder.Services.AddControllersWithViews().ConfigureApiBehaviorOptions((opts) =>
 });
 builder.Services.AddRazorPages();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-builder.Services.AddDbContext<MercuryDevContext>(options => options.UseSqlServer(connectionString));
-builder.Services.AddTransient<RepositoryEF<UserSearch, MercuryDevContext>>();
-builder.Services.AddTransient<RepositoryEF<AspNetUser, MercuryDevContext>>();
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<MercuryContext>(options => options.UseNpgsql(connectionString));
+
+builder.Services.AddTransient<RepositoryEF<AspNetRole, MercuryContext>>();
+builder.Services.AddTransient<RepositoryEF<AspNetUser, MercuryContext>>();
 
 builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
 

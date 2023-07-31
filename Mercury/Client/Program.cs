@@ -26,7 +26,7 @@ builder.Services.AddBlazoredLocalStorage();
 // Adds AuthorizationCore services to the DI container.
 builder.Services.AddAuthorizationCore();
 
-#if DEBUG
+#if !DEBUG
 builder.Services.AddScoped<AuthenticationStateProvider,
     ApiFakeAuthenticationStateProvider>();
 builder.Services.AddScoped<ICustomAuthenticationStateProvider, ApiFakeAuthenticationStateProvider>();

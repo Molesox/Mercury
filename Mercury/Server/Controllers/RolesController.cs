@@ -11,9 +11,9 @@ namespace Mercury.Server.Controllers
     [Route("[controller]")]
     public class RolesController : ControllerBase
     {
-        RepositoryEF<AspNetRole, MercuryDevContext> _aspNetRolesManager;
+        RepositoryEF<AspNetRole, MercuryContext> _aspNetRolesManager;
 
-        public RolesController(RepositoryEF<AspNetRole, MercuryDevContext> aspnetManager)
+        public RolesController(RepositoryEF<AspNetRole, MercuryContext> aspnetManager)
         {
             _aspNetRolesManager = aspnetManager;
         }

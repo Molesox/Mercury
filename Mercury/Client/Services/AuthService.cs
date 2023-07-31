@@ -49,7 +49,7 @@ namespace Mercury.Client.Services
         {
             var failedResult = new RegisterResult("Something bad happened, try again later") { IsSuccesful = false };
 
-#if DEBUG
+#if !DEBUG
             // In a debug environment, simulate successful registration
             await Task.Delay(1000); // simulate some delay
             return new RegisterResult() { IsSuccesful = true };
@@ -82,7 +82,7 @@ namespace Mercury.Client.Services
         /// <returns>A task result that represents the asynchronous operation, containing the login result. A successful login stores the JWT token in local storage and sets the user as authenticated.</returns>
         public async Task<LoginResult> Login(LoginModel loginModel)
         {
-#if DEBUG
+#if !DEBUG
             // In a debug environment, simulate successful login
             await Task.Delay(1000); // simulate some delay
             var fakeToken = "FakeJwtToken"; // replace with a fake JWT if needed
