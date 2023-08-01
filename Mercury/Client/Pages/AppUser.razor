@@ -29,13 +29,7 @@ else
             </RadzenColumn>
             <RadzenColumn  Size="3" SizeLG="2">
                
-                    <RadzenDataList AllowVirtualization="true" Style="height: 50vh; overflow: auto;"
-                                    Data="@commandGroupsUsers" TItem="CommandGroupStr">
-                        <Template Context="command">
-                            <CommandGroup GroupStr="command" />
-                        </Template>
-                    </RadzenDataList>
-
+                <CommandsList/>
 
             </RadzenColumn>
         </RadzenRow>
@@ -44,14 +38,11 @@ else
             <RadzenColumn Size="9" SizeLG="10">
                 <GridCommands Data=@aspNetRoles />
             </RadzenColumn>
-            <RadzenColumn  Size="3" SizeLG="2">
+            <RadzenColumn Size="3" SizeLG="2">
+      
 
-                <RadzenDataList AllowVirtualization="true"  Style="height: 50vh;overflow: auto;"
-                    Data="@commandGroupsRoles" TItem="CommandGroupStr">
-                    <Template Context="command">
-                        <CommandGroup GroupStr="command" />
-                    </Template>
-                </RadzenDataList>
+                <CommandsList/>
+               
 
             </RadzenColumn>
         </RadzenRow>
@@ -66,72 +57,9 @@ else
     IEnumerable<AspNetUser>? aspNetUsers;
     AspNetUser? user;
     string ErrorMessage = "";
-    List<CommandGroupStr>? commandGroupsUsers;
-
-    //same but for roles
-
 
     IEnumerable<AspNetRole>? aspNetRoles;
     AspNetRole? role;
-    List<CommandGroupStr>? commandGroupsRoles;
-
-
-    protected override void OnInitialized()
-    {
-        var commands = new List<CommandGroupStr>()
-{
-new CommandGroupStr
-{
-Title = "Basic operations",
-Buttons = new List<CommandButtonStr>
-{
-new CommandButtonStr{ Variant = "Outlined", ButtonStyle = "Success", Icon = "add" },
-new CommandButtonStr{ Variant = "Outlined", ButtonStyle = "Primary", Icon = "edit" },
-new CommandButtonStr{ Variant = "Outlined", ButtonStyle = "Danger", Icon = "delete" }
-}
-},
-new CommandGroupStr
-{
-Title = "Exports",
-Buttons = new List<CommandButtonStr>
-{
-new CommandButtonStr{ Size = "Small", Variant = "Outlined", Text = "xlsx" },
-new CommandButtonStr{ Size = "Small", Variant = "Outlined", Text = "csv" },
-new CommandButtonStr{ Size = "Small", Variant = "Outlined", Text = "txt" }
-}
-},
-new CommandGroupStr
-{
-Title = "The user access to application",
-Buttons = new List<CommandButtonStr>
-{
-new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Success", Text = "Unlock", Icon="lock_open" },
-new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Danger", Text = "Lock" , Icon="lock"}
-}
-},
-new CommandGroupStr
-{
-Title = "Re-send 2 factor authentication code by",
-Buttons = new List<CommandButtonStr>
-{
-new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Light", Text = "Email", Icon="mail_outline"},
-new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Light", Text = "Phone", Icon="phone" }
-}
-},
-new CommandGroupStr
-{
-Title = "Force user's next login password reset",
-Buttons = new List<CommandButtonStr>
-{
-new CommandButtonStr{ Size = "Small", Variant = "Filled", ButtonStyle = "Light", Text = "Start the password reset",
-Icon="lock_reset" },
-}
-}
-};
-        commandGroupsUsers = commands;
-        commandGroupsRoles = commands;
-        base.OnInitialized();
-    }
 
     async Task GetAllRoles()
     {

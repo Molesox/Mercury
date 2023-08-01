@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mercury.Shared.Models.AspNetUser;
+using Mercury.Shared.Models.Mercury;
 using Microsoft.EntityFrameworkCore;
 
 namespace Mercury.Server.Data.Context;
@@ -27,6 +28,17 @@ public partial class MercuryContext : DbContext
     public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
 
     public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
+
+    public virtual DbSet<Person> Persons { get; set; }
+    public virtual DbSet<PersonProfile> PersonProfiles { get; set; }
+    public virtual DbSet<Address> Addresses { get; set; }
+    public virtual DbSet<Email> Emails { get; set; }
+    public virtual DbSet<Phone> Phones { get; set; }
+    public virtual DbSet<PhoneType> PhoneTypes { get; set; }
+    public virtual DbSet<EmailType> EmailTypes { get; set; }
+    public virtual DbSet<AddressType> AddressTypes { get; set; }
+    
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.

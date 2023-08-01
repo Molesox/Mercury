@@ -17,6 +17,7 @@
   </PropertyGroup>
   
 
+ 
   <ItemGroup>
     <None Include="..\..\.editorconfig" Link=".editorconfig" />
 
@@ -38,4 +39,7 @@
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\Commands\" />
+  </ItemGroup>
 </Project>
