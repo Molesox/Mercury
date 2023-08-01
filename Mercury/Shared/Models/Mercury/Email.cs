@@ -40,7 +40,7 @@ namespace Mercury.Shared.Models.Mercury
         /// Gets or sets the email type ID.
         /// </summary>
         [DataMember]
-        public int EmailTypeID
+        public int? EmailTypeID
         {
             get; set;
         }
@@ -72,7 +72,7 @@ namespace Mercury.Shared.Models.Mercury
         /// </summary>
         [StringLength(200)]
         [DataMember]
-        public string Remarks
+        public string? Remarks
         {
             get; set;
         }
@@ -93,7 +93,7 @@ namespace Mercury.Shared.Models.Mercury
         /// The EmailType associated with this Email.
         /// </summary>
         [DataMember]
-        public virtual EmailType EmailType
+        public virtual EmailType? EmailType
         { get; set; }
 
         /// <summary>

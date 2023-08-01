@@ -32,7 +32,7 @@
                     Register
                 </RadzenText>
                 <RadzenTemplateForm TItem="RegisterModel" Data=@registerModel Submit="@HandleRegistration">
-                    <RadzenStack>
+                    <RadzenStack Gap="1em">
 
                         <RadzenFormField Variant="@Variant.Filled" Text="Email">
                             <ChildContent>
@@ -48,7 +48,7 @@
                                 <RadzenPassword Name="Password" @bind-Value=@registerModel.Password />
                             </ChildContent>
                             <Helper>
-                                <RadzenRequiredValidator Component="Password" Text="Password required" />
+                                <RadzenRequiredValidator @bind-Value=@registerModel.Password DefaultValue="String.Empty" Component="Password" Text="Password required" />
                             </Helper>
                         </RadzenFormField>
                         <RadzenFormField Variant="@Variant.Filled" Text="Confirm password">

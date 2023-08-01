@@ -89,11 +89,13 @@ namespace Mercury.Client.Services
             await _localStorage.SetItemAsync("authToken", fakeToken);
             ((ICustomAuthenticationStateProvider)_authenticationStateProvider).MarkUserAsAuthenticated(loginModel.Email);
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", fakeToken);
+            System.Diagnostics.Debug.WriteLine("Login successful");
             return new LoginResult( ) { IsSuccesful = true, Token = fakeToken };
 #else
             try
             {
                 var loginAsJson = JsonConvert.SerializeObject(loginModel);
+                System.Diagnostics.Debug.WriteLine("Login puta");
 
                 var response = await _httpClient.PostAsync("api/Login",
                     new StringContent(loginAsJson, Encoding.UTF8, "application/json"));

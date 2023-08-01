@@ -2,6 +2,7 @@ using Mercury.Server.Data;
 using Mercury.Server.Data.Context;
 using Mercury.Shared.Models;
 using Mercury.Shared.Models.AspNetUser;
+using Mercury.Shared.Models.Mercury;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
@@ -24,8 +25,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddDbContext<MercuryContext>(options => options.UseNpgsql(connectionString));
 
-builder.Services.AddTransient<RepositoryEF<AspNetRole, MercuryContext>>();
 builder.Services.AddTransient<RepositoryEF<AspNetUser, MercuryContext>>();
+builder.Services.AddTransient<RepositoryEF<AspNetRole, MercuryContext>>();
+builder.Services.AddTransient<RepositoryEF<Person, MercuryContext>>();
 
 builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
 

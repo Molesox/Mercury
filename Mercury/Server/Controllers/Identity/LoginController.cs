@@ -44,7 +44,7 @@ namespace Mercury.Server.Controllers.Identity
             if (result.IsLockedOut) return CreateLoginFailureResponse("User is currently locked out.");
             if (result.IsNotAllowed) return CreateLoginFailureResponse("User is not allowed to login.");
             if (result.RequiresTwoFactor) return CreateLoginFailureResponse("This account requires two-factor authentication.");
-
+            if (!result.Succeeded) return CreateLoginFailureResponse("Wrong credentials");
             var claims = new[] { new Claim(ClaimTypes.Name, login.Email) };
             string? jwtSecurityKey = _configuration.GetValue<string>("JwtSecurityKey");
 

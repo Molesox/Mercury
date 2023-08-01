@@ -3,6 +3,7 @@ using System;
 using Mercury.Server.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mercury.Server.Migrations
 {
     [DbContext(typeof(MercuryContext))]
-    partial class MercuryContextModelSnapshot : ModelSnapshot
+    [Migration("20230801120847_personupdate")]
+    partial class personupdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -392,26 +395,32 @@ namespace Mercury.Server.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Culture")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("character varying(80)");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("character varying(80)");
 
                     b.Property<string>("Remarks")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("character varying(80)");
 
                     b.Property<string>("VatNumber")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
@@ -615,7 +624,7 @@ namespace Mercury.Server.Migrations
             modelBuilder.Entity("Mercury.Shared.Models.Mercury.Person", b =>
                 {
                     b.HasOne("Mercury.Shared.Models.AspNetUser.AspNetUser", "AppUser")
-                        .WithMany("Persons")
+                        .WithMany()
                         .HasForeignKey("AppUserID");
 
                     b.Navigation("AppUser");
@@ -663,8 +672,6 @@ namespace Mercury.Server.Migrations
                     b.Navigation("AspNetUserLogins");
 
                     b.Navigation("AspNetUserTokens");
-
-                    b.Navigation("Persons");
                 });
 
             modelBuilder.Entity("Mercury.Shared.Models.Mercury.AddressType", b =>

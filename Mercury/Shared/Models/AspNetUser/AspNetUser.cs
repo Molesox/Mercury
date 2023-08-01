@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Mercury.Shared.Models.Mercury;
 
 namespace Mercury.Shared.Models.AspNetUser;
 
@@ -49,4 +50,5 @@ public partial class AspNetUser
     public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; } = new List<AspNetUserToken>();
 
     public virtual ICollection<AspNetRole> Roles { get; set; } = new List<AspNetRole>();
+    public virtual ICollection<Person> Persons { get; set; } = new List<Person>();
 }

@@ -13,6 +13,8 @@ namespace Mercury.Shared.Models.Mercury
     [Serializable]
     public partial class Person 
     {
+        public Person() { }
+
         #region Properties
 
         /// <summary>
@@ -25,29 +27,25 @@ namespace Mercury.Shared.Models.Mercury
         {
             get; set;
         }
-        int _personID;
 
         /// <summary>
         /// Gets or sets the AppUser ID.
         /// </summary>
         [DataMember]
-        public int? AppUserID
+        public string? AppUserID
         {
             get; set;
-        }
-        int? _appUserID;
+        } = null!;
 
         /// <summary>
         /// Gets or sets the culture.
         /// </summary>
-        [Required]
         [StringLength(20)]
         [DataMember]
-        public string Culture
+        public string? Culture
         {
             get; set;
         }
-        string _culture;
 
 
         /// <summary>
@@ -55,54 +53,49 @@ namespace Mercury.Shared.Models.Mercury
         /// </summary>
         [StringLength(80)]
         [DataMember]
-        public string Title
+        public string? Title
         {
             get; set;
         }
-        string _title;
 
         /// <summary>
         /// Gets or sets the last name.
         /// </summary>
         [StringLength(80)]
         [DataMember]
-        public string LastName
+        public string? LastName
         {
             get; set;
         }
-        string _lastName;
 
         /// <summary>
         /// Gets or sets the first name.
         /// </summary>
         [StringLength(80)]
         [DataMember]
-        public string FirstName
+        public string? FirstName
         {
             get; set;
         }
-        string _firstName;
 
         /// <summary>
         /// Gets or sets the vat number.
         /// </summary>
         [StringLength(20)]
-        public string VatNumber
+        public string? VatNumber
         {
             get; set;
         }
-        string _vatNumber;
 
         /// <summary>
         /// Gets or sets the remarks.
         /// </summary>
         [StringLength(200)]
         [DataMember]
-        public string Remarks
+        public string? Remarks
         {
             get; set;
         }
-        string _remarks;
 
         /// <summary>
         /// Gets or sets the annual revenue.
@@ -111,8 +104,7 @@ namespace Mercury.Shared.Models.Mercury
         public decimal? AnnualRevenue
         {
             get; set;
-        }
-        decimal? _annualRevenue;
+        } = null!;
 
         /// <summary>
         /// Gets the full name, 
@@ -140,28 +132,28 @@ namespace Mercury.Shared.Models.Mercury
         /// </summary>
         [ForeignKey("PersonID")]
         [DataMember]
-        public virtual ICollection<Address> Addresses { get; set; }
+        public virtual ICollection<Address> Addresses { get; set; }= new List<Address>();
 
         /// <summary>
         /// The collection of Emails associated with this Person.
         /// </summary>
         [ForeignKey("PersonID")]
         [DataMember]
-        public virtual ICollection<Email> Emails { get; set; }
+        public virtual ICollection<Email> Emails { get; set; } = new List<Email>();
 
         /// <summary>
         /// The collection of PersonProfiles associated with this Person.
         /// </summary>
         [ForeignKey("PersonID")]
         [DataMember]
-        public virtual ICollection<PersonProfile> PersonProfiles { get; set; }
+        public virtual ICollection<PersonProfile> PersonProfiles { get; set; }= new List<PersonProfile>();
 
         /// <summary>
         /// The collection of Phones associated with this Person.
         /// </summary>
         [ForeignKey("PersonID")]
         [DataMember]
-        public virtual ICollection<Phone> Phones { get; set; }
+        public virtual ICollection<Phone> Phones { get; set; } = new List<Phone>();
 
         #endregion
     }

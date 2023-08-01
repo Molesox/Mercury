@@ -3,6 +3,7 @@ using System;
 using Mercury.Server.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Mercury.Server.Migrations
 {
     [DbContext(typeof(MercuryContext))]
-    partial class MercuryContextModelSnapshot : ModelSnapshot
+    [Migration("20230801124457_personupdate2")]
+    partial class personupdate2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -615,7 +618,7 @@ namespace Mercury.Server.Migrations
             modelBuilder.Entity("Mercury.Shared.Models.Mercury.Person", b =>
                 {
                     b.HasOne("Mercury.Shared.Models.AspNetUser.AspNetUser", "AppUser")
-                        .WithMany("Persons")
+                        .WithMany()
                         .HasForeignKey("AppUserID");
 
                     b.Navigation("AppUser");
@@ -663,8 +666,6 @@ namespace Mercury.Server.Migrations
                     b.Navigation("AspNetUserLogins");
 
                     b.Navigation("AspNetUserTokens");
-
-                    b.Navigation("Persons");
                 });
 
             modelBuilder.Entity("Mercury.Shared.Models.Mercury.AddressType", b =>

@@ -39,6 +39,7 @@ namespace Mercury.Client
         /// <returns>A task result that represents the asynchronous operation, containing the AuthenticationState of the user.</returns>
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
+
             var savedToken = await _localStorage.GetItemAsync<string>("authToken");
 
             if (string.IsNullOrWhiteSpace(savedToken))
@@ -88,7 +89,8 @@ namespace Mercury.Client
         private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
         {
             var claims = new List<Claim>();
-            var payload = jwt.Split('.')[1];
+            var payload = jwt.Split('.').ElementAtOrDefault(1);
+            if(payload is null) return claims;
             var jsonBytes = ParseBase64WithoutPadding(payload);
             var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
 

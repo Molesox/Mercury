@@ -1,4 +1,8 @@
-﻿using Mercury.Shared.Models.Identity;
+﻿using Mercury.Server.Data;
+using Mercury.Server.Data.Context;
+using Mercury.Shared.Models.AspNetUser;
+using Mercury.Shared.Models.Identity;
+using Mercury.Shared.Models.Mercury;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,14 +16,16 @@ namespace Mercury.Server.Controllers.Identity
     public class AccountsController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly RepositoryEF<Person, MercuryContext> _personManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountsController"/> class.
         /// </summary>
         /// <param name="userManager">An instance of the UserManager for managing IdentityUser data.</param>
-        public AccountsController(UserManager<IdentityUser> userManager)
+        public AccountsController(UserManager<IdentityUser> userManager, RepositoryEF<Person, MercuryContext> personManaer )
         {
             _userManager = userManager;
+            _personManager = personManaer;
         }
 
         /// <summary>
@@ -31,12 +37,11 @@ namespace Mercury.Server.Controllers.Identity
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             var newUser = new IdentityUser { UserName = model.Email, Email = model.Email };
-
             var result = await _userManager.CreateAsync(newUser, model.Password);
 
             if (!result.Succeeded)
             {
-                var errors = result.Errors.Select(x => x.Description) ?? new []{"No description available"};
+                var errors = result.Errors.Select(x => x.Description) ?? new[] { "No description available" };
 
                 return Ok(new RegisterResult
                 {
@@ -45,6 +50,14 @@ namespace Mercury.Server.Controllers.Identity
                 });
 
             }
+            var alrearyExists = (await _personManager.Get(p => p.Emails.Any(e => e.EmailAddress == newUser.Email)));
+            if (alrearyExists.Any())
+            {
+                alrearyExists.First().AppUserID = newUser.Id;
+                var updated = await _personManager.Update(alrearyExists.First());
+            }
+
+            var _ = await _personManager.Insert(new Person(newUser));
 
             return Ok(new RegisterResult { IsSuccesful = true });
         }
