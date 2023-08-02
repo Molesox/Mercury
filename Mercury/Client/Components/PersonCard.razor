@@ -1,0 +1,30 @@
+@using Mercury.Shared.Models.Mercury
+<RadzenCard>
+    <RadzenTemplateForm Data="@person" Submit="@((Person args) => { Submit(args); })">
+        <RadzenStack  Gap="1rem">
+                <RadzenRow AlignItems="AlignItems.Center">
+                    <RadzenColumn Size="12" SizeMD="4">
+                        <RadzenLabel Text="Credit Card" />
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox Style="width: 100%;" Name="FirstName" />
+
+                    </RadzenColumn>
+                </RadzenRow>
+        </RadzenStack >
+
+    </RadzenTemplateForm>
+</RadzenCard>
+
+
+@code {
+
+    Person person { get; set; } = new Person();
+
+    public void Submit(Person person)
+    {
+        // do something with person
+    }
+
+
+}

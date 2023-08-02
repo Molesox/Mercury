@@ -110,6 +110,11 @@ namespace Mercury.Client.Services
 
         }
 
+        public Theme? GetTheme()
+        {
+            return Themes.FirstOrDefault(t => t.Value == DefaultTheme);
+        }
+
         public void Change(string theme)
         {
             if (!Themes.Any(t => t.Value == theme)) return;
