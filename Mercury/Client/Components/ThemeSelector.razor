@@ -1,59 +1,51 @@
 ﻿@inject ThemeService ThemeService
 
-<RadzenStack Orientation="Orientation.Horizontal">
+<RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Normal" JustifyContent="JustifyContent.SpaceEvenly">
 
+    @foreach (var theme in ThemeService.Themes)
+    {
 
-    <RadzenDropDown Class="rz-mx-0 rz-mx-lg-4" id="themes" style="width: 220px;" TValue="string" TextProperty="Text"
-                    ValueProperty="Value" Data="@ThemeService.Themes" Value="@ThemeService.CurrentTheme" Change="@ChangeTheme">
-        <ValueTemplate>
-            @context.Text Theme
-        </ValueTemplate>
-        <Template>
-            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="1rem">
-                <svg width="80" height="60" viewBox="0 0 80 60" fill="none" xmlns="http://www.w3.org/2000/svg"
-                     style="border-radius: 4px; overflow: hidden; outline: var(--rz-border-disabled); min-width: 80px;">
-                    <rect width="80" height="60" fill="@context.Base" />
-                    <rect x="0" y="4" width="16" height="56" fill="@context.Sidebar" />
-                    <rect x="24" y="17" width="48" height="32" rx="2" fill="@context.Content" />
-                    <rect x="43" y="41" width="12" height="4" rx="1" fill="@context.Secondary" />
-                    <rect x="28" y="21" width="16" height="2" rx="1" fill="@context.TitleText" />
-                    <rect x="28" y="27" width="40" height="2" rx="1" fill="@context.ContentText" />
-                    <rect x="28" y="31" width="40" height="2" rx="1" fill="@context.ContentText" />
-                    <rect x="28" y="35" width="16" height="2" rx="1" fill="@context.ContentText" />
-                    <rect x="28" y="41" width="12" height="4" rx="1" fill="@context.Primary" />
-                    <rect width="80" height="6" fill="@context.Header" />
-                </svg>
-                @context.Text
+        <RadzenStack  AlignItems="AlignItems.Center" Gap="0.5rem" @onclick="() => ChangeTheme(theme.Value)" >
 
-            </RadzenStack>
-        </Template>
-    </RadzenDropDown>
+            <svg class="floating-svg" width="80" height="60" viewBox="0 0 80 60" fill="none" xmlns="http://www.w3.org/2000/svg"
+                style="border-radius: 4px; overflow: hidden; outline: var(--rz-border-disabled); min-width: 80px;">
+                <rect width="80" height="60" fill="@theme.Base" />
+                <rect x="0" y="4" width="16" height="56" fill="@theme.Sidebar" />
+                <rect x="24" y="17" width="48" height="32" rx="2" fill="@theme.Content" />
+                <rect x="43" y="41" width="12" height="4" rx="1" fill="@theme.Secondary" />
+                <rect x="28" y="21" width="16" height="2" rx="1" fill="@theme.TitleText" />
+                <rect x="28" y="27" width="40" height="2" rx="1" fill="@theme.ContentText" />
+                <rect x="28" y="31" width="40" height="2" rx="1" fill="@theme.ContentText" />
+                <rect x="28" y="35" width="16" height="2" rx="1" fill="@theme.ContentText" />
+                <rect x="28" y="41" width="12" height="4" rx="1" fill="@theme.Primary" />
+                <rect width="80" height="6" fill="@theme.Header" />
+            </svg>
+            @if (theme.Value == currentTheme.Value)
+            {
+                <RadzenBadge IsPill="true" BadgeStyle="BadgeStyle.Success" Text="@theme.Text" />
+            }
+            else
+            {
+                <RadzenBadge IsPill="true" BadgeStyle="BadgeStyle.Primary" Text="@theme.Text" />
+            }
+        </RadzenStack>
+    }
 
-    <svg width="80" height="60" viewBox="0 0 80 60" fill="none" xmlns="http://www.w3.org/2000/svg"
-         style="border-radius: 4px; overflow: hidden; outline: var(--rz-border-disabled); min-width: 80px;">
-        <rect width="80" height="60" fill="@currentTheme.Base" />
-        <rect x="0" y="4" width="16" height="56" fill="@currentTheme.Sidebar" />
-        <rect x="24" y="17" width="48" height="32" rx="2" fill="@currentTheme.Content" />
-        <rect x="43" y="41" width="12" height="4" rx="1" fill="@currentTheme.Secondary" />
-        <rect x="28" y="21" width="16" height="2" rx="1" fill="@currentTheme.TitleText" />
-        <rect x="28" y="27" width="40" height="2" rx="1" fill="@currentTheme.ContentText" />
-        <rect x="28" y="31" width="40" height="2" rx="1" fill="@currentTheme.ContentText" />
-        <rect x="28" y="35" width="16" height="2" rx="1" fill="@currentTheme.ContentText" />
-        <rect x="28" y="41" width="12" height="4" rx="1" fill="@currentTheme.Primary" />
-        <rect width="80" height="6" fill="@currentTheme.Header" />
-    </svg>
 </RadzenStack>
 
-    @code {
+@code {
 
-        ThemeService.Theme? currentTheme = null;
+    ThemeService.Theme? currentTheme = null;
 
-        override protected void OnInitialized(){
-            currentTheme = ThemeService.GetTheme();
-        }
-       
-        void ChangeTheme(object value)
-        {
-            ThemeService.Change(value as string);
-        }
+    override protected void OnInitialized()
+    {
+        
+        currentTheme = ThemeService.GetTheme();
     }
+
+    void ChangeTheme(object value)
+    {
+        ThemeService.Change(value as string);
+        currentTheme = ThemeService.GetTheme();
+    }
+}

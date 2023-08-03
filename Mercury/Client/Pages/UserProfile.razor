@@ -1,20 +1,35 @@
 ﻿@page "/userprofile"
-
-@using Mercury.Client.Components 
+@using Mercury.Shared.Services;
+@inject ICustomAuthenticationStateProvider authStateProvider
+@using Mercury.Client.Components
 
 
 <PageTitle>User profile</PageTitle>
 <RadzenText Text="My profile" TextStyle="TextStyle.DisplayH3" />
 <RadzenStack>
-<RadzenCard>
-    <RadzenStack>
-        <RadzenText Text="Select your prefered theme" TextStyle="TextStyle.Body1" />
-        <ThemeSelector />
-    </RadzenStack>
+    <RadzenCard>
+        <RadzenStack>
+            <RadzenText Text="Select your prefered theme" TextStyle="TextStyle.DisplayH6" />
+            <ThemeSelector />
+        </RadzenStack>
 
-</RadzenCard>
+    </RadzenCard>
 
-<PersonCard/>
+    <PersonCard />
 
 
 </RadzenStack>
+
+@code {
+    [Inject]
+    public PersonManager personManager { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> authenticationStateTask { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authenticationStateTask;
+        var user = authState.User;
+        var idTofind = authStateProvider.GetUserId();
+
+        var person = await personManager.GetByID(idTofind);
+    }
+}

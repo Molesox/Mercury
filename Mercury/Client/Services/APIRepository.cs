@@ -9,9 +9,9 @@ namespace Mercury.Client.Services
     public class APIRepository<TEntity> : IRepository<TEntity>
       where TEntity : class
     {
-        string controllerName;
-        string primaryKeyName;
-        HttpClient http;
+        protected string controllerName;
+        protected string primaryKeyName;
+        protected HttpClient http;
 
         public APIRepository(HttpClient _http, string _controllerName, string _primaryKeyName)
         {

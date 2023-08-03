@@ -14,6 +14,10 @@ namespace Mercury.Client
             _user = CreateAuthenticatedUser("Test User");
         }
 
+        public async Task<string?> GetUserId()
+        {
+            return "1";
+        }
         public override Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             return Task.FromResult(new AuthenticationState(_user));

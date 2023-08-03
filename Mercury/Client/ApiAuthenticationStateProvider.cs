@@ -33,6 +33,20 @@ namespace Mercury.Client
 
         #region Methods
 
+        public async Task<string?> GetUserId()
+        {
+            var savedToken = await _localStorage.GetItemAsync<string>("authToken");
+
+            if (string.IsNullOrWhiteSpace(savedToken))
+            {
+                return null;
+            }
+
+            var claims = ParseClaimsFromJwt(savedToken);
+
+            return claims?.FirstOrDefault(x => x.Type == "id")?.Value;
+        }
+
         /// <summary>
         /// Gets the authentication state of the current user.
         /// </summary>

@@ -44,6 +44,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<AspNetUserManager>();
 builder.Services.AddScoped<AspNetRoleManager>();
+builder.Services.AddScoped<PersonManager>();
 
 builder.Services.AddScoped<ThemeService>();
 

@@ -1,0 +1,9 @@
+.floating-svg {
+    transition: transform 0.3s ease-in-out;
+    /* Adds a smooth transition effect */
+}
+
+.floating-svg:hover {
+    transform: translateY(-5px);
+    /* Moves the SVG up 5px on hover */
+}

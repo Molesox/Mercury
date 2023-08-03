@@ -74,6 +74,12 @@ namespace Mercury.Shared.Models.Mercury
         public virtual Person Person
         { get; set; }
 
+        /// <summary>
+        /// Gets or sets the theme.
+        /// </summary>
+        [DataMember]
+        public virtual string Theme { get; set; }
+
         #endregion
     }
 }
