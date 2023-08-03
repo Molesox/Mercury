@@ -24,7 +24,6 @@ namespace Mercury.Shared.Models.Mercury
         {
             get; set;
         }
-        int _personProfileID;
 
         /// <summary>
         /// Gets or sets the person ID.
@@ -34,17 +33,15 @@ namespace Mercury.Shared.Models.Mercury
         {
             get; set;
         }
-        int _personID;
 
         /// <summary>
         /// Gets or sets the photo.
         /// </summary>
         [DataMember]
-        public byte[] Photo
+        public byte[]? Photo
         {
             get; set;
         }
-        byte[] _photo;
 
         /// <summary>
         /// Gets or sets the birth date.
@@ -55,31 +52,35 @@ namespace Mercury.Shared.Models.Mercury
         {
             get; set;
         }
-        DateTime? _birthDate;
 
         /// <summary>
         /// Gets or sets the gender.
         /// </summary>
         [DataMember]
-        public int Gender
+        public int? Gender
         {
             get; set;
         }
-        int _gender;
+
+        /// <summary>
+        /// gets or sets the favourite theme
+        /// </summary>
+        [DataMember]
+        public virtual string? Theme
+        {
+            get; set;
+        }
 
         /// <summary>
         /// The Person associated with this PersonProfile.
         /// </summary>
         [DataMember]
         public virtual Person Person
-        { get; set; }
-
-        /// <summary>
-        /// Gets or sets the theme.
-        /// </summary>
-        [DataMember]
-        public virtual string Theme { get; set; }
+        {
+            get; set;
+        }
 
         #endregion
+
     }
 }

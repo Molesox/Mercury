@@ -8,7 +8,7 @@ namespace Mercury.Shared.Models.Mercury
     /// <summary>
     /// The Phone model class.
     /// </summary>
-    [Table("Phone", Schema = "Person")]
+    [Table("Phone", Schema = "Mercury")]
     [Serializable]
     public partial class Phone 
     {

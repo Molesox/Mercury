@@ -3,16 +3,18 @@
         <RadzenImage Path="Images/photodani.jpg" Style="width: 35px; height: 35px; border-radius: 50%;" />
     </Template>
     <ChildContent>
+
         <RadzenStack Gap="0">
 
             <RadzenCard Class="rz-border-color-white rz-shadow-10 rz-m-2">
                 <RadzenStack Orientation="Orientation.Horizontal" Gap="1em">
 
-                    <RadzenImage Path="Images//photodani.jpg"
-                                 Style="width: 65px; height: 65px; border-radius: 50%;" />
+                    <RadzenImage Path="Images//photodani.jpg" Style="width: 65px; height: 65px; border-radius: 50%;" />
                     <RadzenStack Gap="0">
-                        <RadzenText TextStyle="TextStyle.H6" Text="David Tortosa Codoñer"></RadzenText>
-                        <RadzenText Text="david.tortosa@gmail.com"></RadzenText>
+                        <RadzenText TextStyle="TextStyle.H6" Text="@person.FullName"></RadzenText>
+                        <RadzenText>
+                            @person.Emails.FirstOrDefault()?.EmailAddress
+                        </RadzenText>
                     </RadzenStack>
                 </RadzenStack>
             </RadzenCard>
@@ -21,8 +23,28 @@
             </NavLink>
             <NavLink Class="rz-mx-2 rz-my-1" href="Logout">
                 <RadzenButton Style="width:100%;" Text="Logout" Icon="exit_to_app"
-                              ButtonStyle="ButtonStyle.Secondary" />
+                    ButtonStyle="ButtonStyle.Secondary" />
             </NavLink>
         </RadzenStack>
+
+
     </ChildContent>
 </RadzenProfileMenu>
+
+@code {
+
+    [Inject]
+    public PersonManager personManager { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> authenticationStateTask { get; set; }
+    Person person = new Person();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authenticationStateTask;
+        var userEmail = authState.User.Identity.Name;
+
+        var result = await personManager.GetPersonByEmail(userEmail);
+        if (result.Success) person = result.Data;
+    }
+     
+}

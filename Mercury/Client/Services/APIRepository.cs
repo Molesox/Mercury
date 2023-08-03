@@ -29,7 +29,7 @@ namespace Mercury.Client.Services
 
                 string responseBody = await result.Content.ReadAsStringAsync();
                 var response = JsonConvert.DeserializeObject<APIListOfEntityResponse<TEntity>>(responseBody);
-                
+
                 if (response is not null && response.Success)
                     return response.Data;
                 else
@@ -92,7 +92,13 @@ namespace Mercury.Client.Services
         {
             try
             {
-                var result = await http.PutAsJsonAsync(controllerName, entityToUpdate);
+
+                var settings = new System.Text.Json.JsonSerializerOptions
+                {
+                    ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve
+                };
+
+                var result = await http.PutAsJsonAsync(controllerName, entityToUpdate, settings);
                 result.EnsureSuccessStatusCode();
 
                 string responseBody = await result.Content.ReadAsStringAsync();

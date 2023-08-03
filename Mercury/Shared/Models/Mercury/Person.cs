@@ -11,7 +11,7 @@ namespace Mercury.Shared.Models.Mercury
     /// </summary>
     [Table("Person", Schema = "Mercury")]
     [Serializable]
-    public partial class Person 
+    public partial class Person
     {
         public Person() { }
 
@@ -124,7 +124,7 @@ namespace Mercury.Shared.Models.Mercury
         /// The AppUser associated with this Person.
         /// </summary>
         [DataMember]
-        public virtual AspNetUser.AspNetUser AppUser
+        public virtual AspNetUser.AspNetUser? AppUser
         { get; set; }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace Mercury.Shared.Models.Mercury
         /// </summary>
         [ForeignKey("PersonID")]
         [DataMember]
-        public virtual ICollection<Address> Addresses { get; set; }= new List<Address>();
+        public virtual ICollection<Address> Addresses { get; set; } = new List<Address>();
 
         /// <summary>
         /// The collection of Emails associated with this Person.
@@ -146,7 +146,7 @@ namespace Mercury.Shared.Models.Mercury
         /// </summary>
         [ForeignKey("PersonID")]
         [DataMember]
-        public virtual ICollection<PersonProfile> PersonProfiles { get; set; }= new List<PersonProfile>();
+        public virtual ICollection<PersonProfile> PersonProfiles { get; set; } = new List<PersonProfile>();
 
         /// <summary>
         /// The collection of Phones associated with this Person.

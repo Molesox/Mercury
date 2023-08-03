@@ -1,13 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Mercury.Server.Migrations
+namespace Mercury.Server.Data.SQLMigrations
 {
     /// <inheritdoc />
-    public partial class Persons : Migration
+    public partial class InitialCreationDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,19 +14,16 @@ namespace Mercury.Server.Migrations
             migrationBuilder.EnsureSchema(
                 name: "Mercury");
 
-            migrationBuilder.EnsureSchema(
-                name: "Person");
-
             migrationBuilder.CreateTable(
                 name: "AddressType",
                 schema: "Mercury",
                 columns: table => new
                 {
-                    AddressTypeID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Code = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: false),
-                    Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
-                    SortKey = table.Column<int>(type: "integer", nullable: true)
+                    AddressTypeID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    SortKey = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -38,10 +34,10 @@ namespace Mercury.Server.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -52,21 +48,21 @@ namespace Mercury.Server.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,11 +74,11 @@ namespace Mercury.Server.Migrations
                 schema: "Mercury",
                 columns: table => new
                 {
-                    EmailTypeID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Code = table.Column<string>(type: "character varying(1)", maxLength: 1, nullable: false),
-                    Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
-                    SortKey = table.Column<int>(type: "integer", nullable: true)
+                    EmailTypeID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    SortKey = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -94,11 +90,11 @@ namespace Mercury.Server.Migrations
                 schema: "Mercury",
                 columns: table => new
                 {
-                    PhoneTypeID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Code = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: false),
-                    Name = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
-                    SortKey = table.Column<int>(type: "integer", nullable: true)
+                    PhoneTypeID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    SortKey = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -109,11 +105,11 @@ namespace Mercury.Server.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RoleId = table.Column<string>(type: "text", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -130,11 +126,11 @@ namespace Mercury.Server.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    ClaimType = table.Column<string>(type: "text", nullable: true),
-                    ClaimValue = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -151,10 +147,10 @@ namespace Mercury.Server.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
-                    UserId = table.Column<string>(type: "text", nullable: false)
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -171,8 +167,8 @@ namespace Mercury.Server.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    RoleId = table.Column<string>(type: "text", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -195,10 +191,10 @@ namespace Mercury.Server.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -216,27 +212,25 @@ namespace Mercury.Server.Migrations
                 schema: "Mercury",
                 columns: table => new
                 {
-                    PersonID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    AppUserID = table.Column<int>(type: "integer", nullable: true),
-                    Culture = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    Title = table.Column<string>(type: "character varying(80)", maxLength: 80, nullable: false),
-                    LastName = table.Column<string>(type: "character varying(80)", maxLength: 80, nullable: false),
-                    FirstName = table.Column<string>(type: "character varying(80)", maxLength: 80, nullable: false),
-                    VatNumber = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    Remarks = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    AnnualRevenue = table.Column<decimal>(type: "numeric", nullable: true),
-                    AppUserId = table.Column<string>(type: "text", nullable: false)
+                    PersonID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AppUserID = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Culture = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: true),
+                    VatNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Remarks = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    AnnualRevenue = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Person", x => x.PersonID);
                     table.ForeignKey(
-                        name: "FK_Person_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
+                        name: "FK_Person_AspNetUsers_AppUserID",
+                        column: x => x.AppUserID,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -244,20 +238,20 @@ namespace Mercury.Server.Migrations
                 schema: "Mercury",
                 columns: table => new
                 {
-                    AddressID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PersonID = table.Column<int>(type: "integer", nullable: false),
-                    AddressTypeID = table.Column<int>(type: "integer", nullable: false),
-                    AddressLine1 = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: false),
-                    AddressLine2 = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: false),
-                    AddressLine3 = table.Column<string>(type: "character varying(60)", maxLength: 60, nullable: false),
-                    PostalCode = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    City = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Region = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
-                    Country = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
-                    SortKey = table.Column<int>(type: "integer", nullable: true),
-                    Remarks = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    IsDefault = table.Column<bool>(type: "boolean", nullable: false)
+                    AddressID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PersonID = table.Column<int>(type: "int", nullable: false),
+                    AddressTypeID = table.Column<int>(type: "int", nullable: false),
+                    AddressLine1 = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    AddressLine2 = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    AddressLine3 = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    PostalCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Region = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    SortKey = table.Column<int>(type: "int", nullable: true),
+                    Remarks = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    IsDefault = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -283,14 +277,14 @@ namespace Mercury.Server.Migrations
                 schema: "Mercury",
                 columns: table => new
                 {
-                    EmailID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PersonID = table.Column<int>(type: "integer", nullable: false),
-                    EmailTypeID = table.Column<int>(type: "integer", nullable: false),
-                    EmailAddress = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    SortKey = table.Column<int>(type: "integer", nullable: true),
-                    Remarks = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    IsDefault = table.Column<bool>(type: "boolean", nullable: false)
+                    EmailID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PersonID = table.Column<int>(type: "int", nullable: false),
+                    EmailTypeID = table.Column<int>(type: "int", nullable: true),
+                    EmailAddress = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    SortKey = table.Column<int>(type: "int", nullable: true),
+                    Remarks = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    IsDefault = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -300,8 +294,7 @@ namespace Mercury.Server.Migrations
                         column: x => x.EmailTypeID,
                         principalSchema: "Mercury",
                         principalTable: "EmailType",
-                        principalColumn: "EmailTypeID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "EmailTypeID");
                     table.ForeignKey(
                         name: "FK_Email_Person_PersonID",
                         column: x => x.PersonID,
@@ -316,12 +309,13 @@ namespace Mercury.Server.Migrations
                 schema: "Mercury",
                 columns: table => new
                 {
-                    PersonProfileID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PersonID = table.Column<int>(type: "integer", nullable: false),
-                    Photo = table.Column<byte[]>(type: "bytea", nullable: false),
+                    PersonProfileID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PersonID = table.Column<int>(type: "int", nullable: false),
+                    Photo = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     BirthDate = table.Column<DateTime>(type: "date", nullable: true),
-                    Gender = table.Column<int>(type: "integer", nullable: false)
+                    Gender = table.Column<int>(type: "int", nullable: true),
+                    Theme = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -337,17 +331,17 @@ namespace Mercury.Server.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Phone",
-                schema: "Person",
+                schema: "Mercury",
                 columns: table => new
                 {
-                    PhoneID = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PersonID = table.Column<int>(type: "integer", nullable: false),
-                    PhoneTypeID = table.Column<int>(type: "integer", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
-                    SortKey = table.Column<int>(type: "integer", nullable: true),
-                    Remarks = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    IsDefault = table.Column<bool>(type: "boolean", nullable: false)
+                    PhoneID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PersonID = table.Column<int>(type: "int", nullable: false),
+                    PhoneTypeID = table.Column<int>(type: "int", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    SortKey = table.Column<int>(type: "int", nullable: true),
+                    Remarks = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    IsDefault = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -389,7 +383,8 @@ namespace Mercury.Server.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -415,7 +410,8 @@ namespace Mercury.Server.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Email_EmailTypeID",
@@ -430,10 +426,10 @@ namespace Mercury.Server.Migrations
                 column: "PersonID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Person_AppUserId",
+                name: "IX_Person_AppUserID",
                 schema: "Mercury",
                 table: "Person",
-                column: "AppUserId");
+                column: "AppUserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PersonProfile_PersonID",
@@ -443,13 +439,13 @@ namespace Mercury.Server.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Phone_PersonID",
-                schema: "Person",
+                schema: "Mercury",
                 table: "Phone",
                 column: "PersonID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Phone_PhoneTypeID",
-                schema: "Person",
+                schema: "Mercury",
                 table: "Phone",
                 column: "PhoneTypeID");
         }
@@ -486,7 +482,7 @@ namespace Mercury.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Phone",
-                schema: "Person");
+                schema: "Mercury");
 
             migrationBuilder.DropTable(
                 name: "AddressType",

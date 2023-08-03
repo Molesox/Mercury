@@ -1,4 +1,5 @@
 ﻿@page "/userprofile"
+@using Mercury.Shared.Models.Mercury;
 @using Mercury.Shared.Services;
 @inject ICustomAuthenticationStateProvider authStateProvider
 @using Mercury.Client.Components
@@ -14,8 +15,11 @@
         </RadzenStack>
 
     </RadzenCard>
+    @if (person is not null)
+    {
 
-    <PersonCard />
+        <PersonCard person=@person />
+    }
 
 
 </RadzenStack>
@@ -24,12 +28,16 @@
     [Inject]
     public PersonManager personManager { get; set; }
     [CascadingParameter] private Task<AuthenticationState> authenticationStateTask { get; set; }
+
+    Person? person { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         var authState = await authenticationStateTask;
-        var user = authState.User;
-        var idTofind = authStateProvider.GetUserId();
+        var userEmail = authState.User.Identity.Name;
 
-        var person = await personManager.GetByID(idTofind);
+        var result = await personManager.GetPersonByEmail(userEmail);
+        if (result.Success) person = result.Data;
+
     }
 }

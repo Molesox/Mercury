@@ -1,6 +1,7 @@
 using Mercury.Shared.API;
 using Mercury.Shared.Models.Mercury;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace Mercury.Client.Services
 {
@@ -16,24 +17,25 @@ namespace Mercury.Client.Services
         {
             try
             {
-                var result = await base.http.GetAsync($"{base.controllerName}/GetPersonByEmail/{email}");
+                var url = $"{base.controllerName}/GetPersonByEmail/{WebUtility.HtmlEncode(email)}";
+                var result = await base.http.GetAsync(url);
                 result.EnsureSuccessStatusCode();
                 var responseBody = await result.Content.ReadAsStringAsync();
-                var response = JsonConvert.DeserializeObject<APIListOfEntityResponse<Person>>(responseBody);
+                var response = JsonConvert.DeserializeObject<APIEntityResponse<Person>>(responseBody);
 
 
                 if (response is not null && response.Success)
                     return new APIEntityResponse<Person>()
                     {
                         Success = true,
-                        Data = response.Data.FirstOrDefault()
+                        Data = response.Data
                     };
                 else
                 {
                     return new APIEntityResponse<Person>()
                     {
                         Success = false,
-                        ErrorMessages = new List<string>() { result.ReasonPhrase }
+                        ErrorMessages = new List<string>() {"Not found"}
                     };
                 }
             }

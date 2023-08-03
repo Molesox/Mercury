@@ -24,7 +24,6 @@ namespace Mercury.Shared.Models.Mercury
         {
             get; set;
         }
-        int _emailID;
 
         /// <summary>
         /// Gets or sets the person ID.
@@ -34,7 +33,6 @@ namespace Mercury.Shared.Models.Mercury
         {
             get; set;
         }
-        int _personID;
 
         /// <summary>
         /// Gets or sets the email type ID.
@@ -44,7 +42,7 @@ namespace Mercury.Shared.Models.Mercury
         {
             get; set;
         }
-        int _emailTypeID;
+
 
         /// <summary>
         /// Gets or sets the email address.
@@ -55,7 +53,7 @@ namespace Mercury.Shared.Models.Mercury
         {
             get; set;
         }
-        string _emailAddress;
+
 
         /// <summary>
         /// Gets or sets the sort key.
@@ -65,7 +63,7 @@ namespace Mercury.Shared.Models.Mercury
         {
             get; set;
         }
-        int? _sortKey;
+
 
         /// <summary>
         /// Gets or sets the remarks.
@@ -76,7 +74,7 @@ namespace Mercury.Shared.Models.Mercury
         {
             get; set;
         }
-        string _remarks;
+
 
         /// <summary>
         /// Gets or sets the is default flag.
@@ -86,7 +84,7 @@ namespace Mercury.Shared.Models.Mercury
         {
             get; set;
         }
-        bool _isDefault;
+
 
 
         /// <summary>

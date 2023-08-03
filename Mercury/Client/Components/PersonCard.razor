@@ -41,10 +41,10 @@
                 </RadzenRow>
             </RadzenRow>
             <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem"
-                Class="rz-mt-8 rz-mb-4">
+                         Class="rz-mt-8 rz-mb-4">
                 <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large" Icon="save" Text="Save" />
                 <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Large"
-                    Icon="cancel" Text="Cancel" />
+                              Icon="cancel" Text="Cancel" />
             </RadzenStack>
         </RadzenStack>
 
@@ -54,9 +54,14 @@
 
 
 @code {
+    [Inject]
+    public PersonManager personManager { get; set; }
 
-    Person person { get; set; } = new Person();
-    PersonProfile personProfile {
+    [Parameter]
+    public Person person { get; set; } = new Person();
+
+    PersonProfile personProfile
+    {
         get
         {
             if (person.PersonProfiles.Any())
@@ -69,7 +74,7 @@
                 return person.PersonProfiles.First();
             }
         }
-    }  
+    }
     string email
     {
         get
@@ -92,9 +97,10 @@
             }
         }
     }
-    public void Submit(Person person)
+    public async void Submit(Person person)
     {
-        // do something with person
+        await personManager.Update(person);
+        StateHasChanged();
     }
 
 

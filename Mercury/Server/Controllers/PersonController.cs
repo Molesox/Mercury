@@ -3,10 +3,11 @@ using Mercury.Server.Data.Context;
 using Mercury.Shared.API;
 using Mercury.Shared.Models.Mercury;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGeneration.CommandLine;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
-class PersonController : ControllerBase
+public class PersonController : ControllerBase
 {
     RepositoryEF<Person, MercuryContext> _personManager;
 
@@ -69,12 +70,13 @@ class PersonController : ControllerBase
         }
     }
 
-    [HttpGet("GetByEmail/{email}")]
+    [HttpGet("GetPersonByEmail/{email}")]
     public async Task<ActionResult<APIEntityResponse<Person>>> GetPersonByEmail([FromRoute] string email)
     {
         try
         {
-            var person = (await _personManager.Get(x => x.Emails.First().EmailAddress == email)).FirstOrDefault();
+            var person = (await _personManager.Get(x => x.Emails.First().EmailAddress == email, includeProperties: nameof(Person.Emails))).FirstOrDefault();
+
             if (person is not null) return Ok(new APIEntityResponse<Person>()
             {
                 Success = true,

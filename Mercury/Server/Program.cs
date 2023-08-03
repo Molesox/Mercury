@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -18,12 +19,17 @@ var connectionString = configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddControllersWithViews().ConfigureApiBehaviorOptions((opts) =>
 {
-    //opts.SuppressModelStateInvalidFilter = true;
+
+    opts.SuppressModelStateInvalidFilter = true;
+}).AddJsonOptions(opts =>
+{
+    opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+
 });
 builder.Services.AddRazorPages();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
-builder.Services.AddDbContext<MercuryContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<MercuryContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddTransient<RepositoryEF<AspNetUser, MercuryContext>>();
 builder.Services.AddTransient<RepositoryEF<AspNetRole, MercuryContext>>();
