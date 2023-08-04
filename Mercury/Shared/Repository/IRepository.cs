@@ -1,4 +1,6 @@
-﻿namespace Mercury.Shared.Repository
+﻿using System.Linq.Expressions;
+using System.Reflection;
+namespace Mercury.Shared.Repository
 {
     /// <summary>
     /// The IRepository interface provides the standard operations to be performed on a data repository for a given type.
@@ -7,7 +9,7 @@
     public interface IRepository<TEntity> where TEntity : class
     {
         #region Methods
-        
+
         /// <summary>
         /// Deletes the specified entity from the repository.
         /// </summary>
@@ -34,6 +36,21 @@
         /// <param name="id">ID of the entity to retrieve.</param>
         /// <returns>The entity if found; otherwise, null.</returns>
         Task<TEntity?> GetByID(object id);
+
+        /// <summary>
+        /// Gets entities based on a query filter.
+        /// </summary>
+        /// <param name="queryFilter">The query filter to use</param>
+        /// <returns>An IEnumerable of filtered entities.</returns>
+        Task<IEnumerable<TEntity>> Get(QueryFilter<TEntity> queryFilter);
+
+        /// <summary>
+        /// Gets entities based on a Expresion
+        /// </summary>
+        /// <param name="queryLinq">The expression to filter the entities</param>
+        /// <returns>An IEnumerable of filtered entities./returns>
+        Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> queryLinq);
+
 
         /// <summary>
         /// Inserts a new entity into the repository.

@@ -29,6 +29,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.5" PrivateAssets="all" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Radzen.Blazor" Version="4.13.4" />
+    <PackageReference Include="Serialize.Linq" Version="3.0.134" />
   </ItemGroup>
 
   <ItemGroup>

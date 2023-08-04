@@ -3,6 +3,8 @@ using Mercury.Shared.Repository;
 using System.Net.Http.Json;
 using System.Net;
 using Newtonsoft.Json;
+using System.Linq.Expressions;
+using Serialize.Linq.Serializers;
 
 namespace Mercury.Client.Services
 {
@@ -41,6 +43,7 @@ namespace Mercury.Client.Services
             }
         }
 
+
         public async Task<TEntity?> GetByID(object id)
         {
             try
@@ -66,6 +69,49 @@ namespace Mercury.Client.Services
             }
         }
 
+        public async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> queryLinq)
+        {
+
+            var serializer = new ExpressionSerializer(new Serialize.Linq.Serializers.JsonSerializer());
+            var encodedExpression = serializer.SerializeText(queryLinq);
+
+            var url = @$"{controllerName}/getwithLinqfilter";
+            var result = await http.PostAsJsonAsync(url, encodedExpression);
+            result.EnsureSuccessStatusCode();
+
+            string responseBody = await result.Content.ReadAsStringAsync();
+            var response = JsonConvert.DeserializeObject<APIListOfEntityResponse<TEntity>>(responseBody);
+
+            if (response is not null && response.Success)
+                return response.Data;
+            else
+                return new List<TEntity>();
+
+        }
+
+        public async Task<IEnumerable<TEntity>> Get(QueryFilter<TEntity> queryFilter)
+        {
+            try
+            {
+                string url = $"{controllerName}/getwithfilter";
+                var result = await http.PostAsJsonAsync(url, queryFilter);
+                result.EnsureSuccessStatusCode();
+
+                string responseBody = await result.Content.ReadAsStringAsync();
+                var response = JsonConvert.DeserializeObject<APIListOfEntityResponse<TEntity>> (responseBody);
+
+                if (response is not null && response.Success)
+                    return response.Data;
+                else
+                    return new List<TEntity>();
+            }
+            catch (Exception ex)
+            {
+                return new List<TEntity>();
+            }
+        }
+
+
         public async Task<TEntity?> Insert(TEntity entity)
         {
             try
@@ -88,7 +134,7 @@ namespace Mercury.Client.Services
             }
         }
 
-        public async Task<TEntity?> Update(TEntity entityToUpdate)
+        public virtual async Task<TEntity?> Update(TEntity entityToUpdate)
         {
             try
             {
@@ -163,5 +209,7 @@ namespace Mercury.Client.Services
                 return false;
             }
         }
+
+    
     }
 }

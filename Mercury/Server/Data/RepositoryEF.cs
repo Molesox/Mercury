@@ -6,11 +6,11 @@ using System.Linq.Expressions;
 namespace Mercury.Server.Data
 {
     /// <summary>
-    /// RepositoryEF is an implementation of IRepositoryGenericGet interface that uses Entity Framework.
+    /// RepositoryEF is an implementation of IRepository interface that uses Entity Framework.
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity that this repository works with.</typeparam>
     /// <typeparam name="TDataContext">The type of the DbContext that this repository uses.</typeparam>
-    public class RepositoryEF<TEntity, TDataContext> : IRepositoryGenericGet<TEntity>
+    public class RepositoryEF<TEntity, TDataContext> : IRepository<TEntity>
         where TEntity : class
         where TDataContext : DbContext
     {
@@ -52,39 +52,27 @@ namespace Mercury.Server.Data
         }
 
         /// <summary>
-        /// Generic Get method for retrieving entities.
+        /// Get method for retrieving entities according to a QueryFilter.
         /// </summary>
         /// <param name="filter">A function to test each element for a condition; only elements that pass the test are included in the returned collection.</param>
         /// <param name="orderBy">A function to order elements.</param>
         /// <param name="includeProperties">Properties to be included in the query result.</param>
         /// <returns>An IEnumerable of entities.</returns>
-        public virtual async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>>? filter = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, string includeProperties = "")
-        {//todo: handle nulls 
-            try
-            {
-                // Get the dbSet from the Entity passed in                
-                IQueryable<TEntity> query = dbSet;
+        public virtual async Task<IEnumerable<TEntity>> Get(QueryFilter<TEntity> queryFilter)
+        {
+            var allitems = (await GetAll()).ToList();
+            return queryFilter.GetFilteredList(allitems);
 
-                // Apply the filter
-                if (filter is not null) query = query.Where(filter);
+        }
 
-                // Include the specified properties
-                foreach (var includeProperty in includeProperties.Split
-                    (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    query = query.Include(includeProperty);
-                }
-
-                // Sort
-                if (orderBy is not null) return orderBy(query).ToList();
-                else return await query.ToListAsync();
-
-            }
-            catch (Exception ex)
-            {
-                // log exception here
-                return new List<TEntity>();
-            }
+        /// <summary>
+        /// Generic get method for retrieving entities.
+        /// </summary>
+        /// <param name="queryLinq"></param>
+        /// <returns></returns>
+        public virtual async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> queryLinq)
+        {
+            return await dbSet.Where(queryLinq).Include("Emails").ToListAsync();
         }
 
         /// <summary>
@@ -94,7 +82,7 @@ namespace Mercury.Server.Data
         public virtual async Task<IEnumerable<TEntity>> GetAll()
         {
             if (typeof(TEntity).Name.Contains("Search"))
-            { 
+            {
                 // Use reflection to check if a corresponding EntitySearch function exists
                 var methodName = typeof(TEntity).Name;
                 var searchFunction = typeof(TDataContext).GetMethod(methodName);

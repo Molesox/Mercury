@@ -10,7 +10,7 @@
 <RadzenStack>
     <RadzenCard>
         <RadzenStack>
-            <RadzenText Text="Select your prefered theme" TextStyle="TextStyle.DisplayH6" />
+            <RadzenText Text="Select your favourite theme" TextStyle="TextStyle.DisplayH6" />
             <ThemeSelector />
         </RadzenStack>
 
@@ -36,8 +36,8 @@
         var authState = await authenticationStateTask;
         var userEmail = authState.User.Identity.Name;
 
-        var result = await personManager.GetPersonByEmail(userEmail);
-        if (result.Success) person = result.Data;
+        var result = await personManager.Get(p => p.Emails.FirstOrDefault().EmailAddress == userEmail);
+        person = result.FirstOrDefault();
 
     }
 }

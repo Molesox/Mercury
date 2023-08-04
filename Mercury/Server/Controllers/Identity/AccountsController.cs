@@ -16,16 +16,14 @@ namespace Mercury.Server.Controllers.Identity
     public class AccountsController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly RepositoryEF<Person, MercuryContext> _personManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountsController"/> class.
         /// </summary>
         /// <param name="userManager">An instance of the UserManager for managing IdentityUser data.</param>
-        public AccountsController(UserManager<IdentityUser> userManager, RepositoryEF<Person, MercuryContext> personManaer )
+        public AccountsController(UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;
-            _personManager = personManaer;
         }
 
         /// <summary>
@@ -50,14 +48,7 @@ namespace Mercury.Server.Controllers.Identity
                 });
 
             }
-            var alrearyExists = (await _personManager.Get(p => p.Emails.Any(e => e.EmailAddress == newUser.Email)));
-            if (alrearyExists.Any())
-            {
-                alrearyExists.First().AppUserID = newUser.Id;
-                var updated = await _personManager.Update(alrearyExists.First());
-            }
-
-            var _ = await _personManager.Insert(new Person(newUser));
+ 
 
             return Ok(new RegisterResult { IsSuccesful = true });
         }
