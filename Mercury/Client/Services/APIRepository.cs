@@ -69,24 +69,26 @@ namespace Mercury.Client.Services
             }
         }
 
-        public async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> queryLinq)
+        public async Task<IEnumerable<TEntity>> Get(LinqQueryFilter<TEntity> linqQueryFilter)
         {
+            try
+            {
+                var url = $"{controllerName}/getwithLinqfilter";
+                var result = await http.PostAsJsonAsync(url, linqQueryFilter);
+                result.EnsureSuccessStatusCode();
 
-            var serializer = new ExpressionSerializer(new Serialize.Linq.Serializers.JsonSerializer());
-            var encodedExpression = serializer.SerializeText(queryLinq);
+                string responseBody = await result.Content.ReadAsStringAsync();
+                var response = JsonConvert.DeserializeObject<APIListOfEntityResponse<TEntity>>(responseBody);
 
-            var url = @$"{controllerName}/getwithLinqfilter";
-            var result = await http.PostAsJsonAsync(url, encodedExpression);
-            result.EnsureSuccessStatusCode();
-
-            string responseBody = await result.Content.ReadAsStringAsync();
-            var response = JsonConvert.DeserializeObject<APIListOfEntityResponse<TEntity>>(responseBody);
-
-            if (response is not null && response.Success)
-                return response.Data;
-            else
+                if (response is not null && response.Success)
+                    return response.Data;
+                else
+                    return new List<TEntity>();
+            }
+            catch (Exception ex)
+            {
                 return new List<TEntity>();
-
+            }
         }
 
         public async Task<IEnumerable<TEntity>> Get(QueryFilter<TEntity> queryFilter)
@@ -98,7 +100,7 @@ namespace Mercury.Client.Services
                 result.EnsureSuccessStatusCode();
 
                 string responseBody = await result.Content.ReadAsStringAsync();
-                var response = JsonConvert.DeserializeObject<APIListOfEntityResponse<TEntity>> (responseBody);
+                var response = JsonConvert.DeserializeObject<APIListOfEntityResponse<TEntity>>(responseBody);
 
                 if (response is not null && response.Success)
                     return response.Data;
@@ -210,6 +212,6 @@ namespace Mercury.Client.Services
             }
         }
 
-    
+
     }
 }

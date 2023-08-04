@@ -70,9 +70,9 @@ namespace Mercury.Server.Data
         /// </summary>
         /// <param name="queryLinq"></param>
         /// <returns></returns>
-        public virtual async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> queryLinq)
+        public virtual async Task<IEnumerable<TEntity>> Get(LinqQueryFilter<TEntity> linqQueryFilter)
         {
-            return await dbSet.Where(queryLinq).Include("Emails").ToListAsync();
+            return linqQueryFilter.GetFilteredList(dbSet);
         }
 
         /// <summary>

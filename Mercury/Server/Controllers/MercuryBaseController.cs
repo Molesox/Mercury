@@ -96,13 +96,11 @@ namespace Mercury.Server.Controllers
         }
 
         [HttpPost("getwithLinqfilter")]
-        public async Task<ActionResult<APIListOfEntityResponse<TEntity>>> GetWithLinqFilter([FromBody] string expression)
+        public async Task<ActionResult<APIListOfEntityResponse<TEntity>>> GetWithLinqFilter([FromBody] LinqQueryFilter<TEntity> linqQueryFilter)
         {
-            var serializer = new ExpressionSerializer(new JsonSerializer());
             try
             {
-                var deserializedExpression = serializer.DeserializeText(expression) as Expression<Func<TEntity, bool>>;
-                var result = await _repository.Get(deserializedExpression);
+                var result = await _repository.Get(linqQueryFilter);
                 
                 return Ok(new APIListOfEntityResponse<TEntity>()
                 {

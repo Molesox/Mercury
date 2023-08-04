@@ -1,5 +1,6 @@
 ﻿@page "/userprofile"
 @using Mercury.Shared.Models.Mercury;
+@using Mercury.Shared.Repository;
 @using Mercury.Shared.Services;
 @inject ICustomAuthenticationStateProvider authStateProvider
 @using Mercury.Client.Components
@@ -36,7 +37,7 @@
         var authState = await authenticationStateTask;
         var userEmail = authState.User.Identity.Name;
 
-        var result = await personManager.Get(p => p.Emails.FirstOrDefault().EmailAddress == userEmail);
+        var result = await personManager.Get(new LinqQueryFilter<Person>(p => p.Emails.FirstOrDefault().EmailAddress == userEmail, new List<string>() { nameof(Person.Emails) }));
         person = result.FirstOrDefault();
 
     }

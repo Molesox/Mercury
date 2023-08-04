@@ -1,4 +1,5 @@
-﻿<RadzenProfileMenu>
+﻿@using Mercury.Shared.Repository;
+<RadzenProfileMenu>
     <Template>
         <RadzenImage Path="Images/photodani.jpg" Style="width: 35px; height: 35px; border-radius: 50%;" />
     </Template>
@@ -45,7 +46,7 @@
         var authState = await authenticationStateTask;
         var userEmail = authState.User.Identity.Name;
 
-        var result = await personManager.Get(p => p.Emails.FirstOrDefault().EmailAddress == userEmail);
+        var result = await personManager.Get(new LinqQueryFilter<Person>(p => p.Emails.FirstOrDefault().EmailAddress == userEmail, new List<string>() { nameof(Person.Emails) }));
         person = result.FirstOrDefault();
 
 

@@ -49,7 +49,7 @@ namespace Mercury.Shared.Repository
         /// </summary>
         /// <param name="queryLinq">The expression to filter the entities</param>
         /// <returns>An IEnumerable of filtered entities./returns>
-        Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> queryLinq);
+        Task<IEnumerable<TEntity>> Get(LinqQueryFilter<TEntity> linqQueryFilter);
 
 
         /// <summary>
